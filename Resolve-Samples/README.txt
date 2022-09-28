@@ -233,7 +233,7 @@ Elements can be accessed by the window's FindWindow(id) function, or by assignin
 
 UIManager Layout
 ----------------
-Additionally, elements can be nested to define layout, using the HGroup and VGroup elements. As with Window and other elements, tou can pass a single dictionary or list with all properties and children, or separate them into a dict of properties and list of children, for convenience:
+Additionally, elements can be nested to define layout, using the HGroup and VGroup elements. As with Window and other elements, you can pass a single dictionary or list with all properties and children, or separate them into a dict of properties and list of children, for convenience:
 
 	winLayout = ui.VGroup([
 		ui.Label({ 'Text': "A 2x2 grid of buttons", 'Weight': 1 }),
