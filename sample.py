@@ -1,0 +1,1 @@
+/Library/Application Support/Blackmagic Design/DaVinci Resolve/Workflow Integration Plugins/sample.py
