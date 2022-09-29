@@ -7,32 +7,30 @@ win = dispatcher.AddWindow(
         "WindowTitle": "sample",
     },
     ui.VGroup(
-        {"Spacing": 5},
+        {
+            "Spacing": 5,
+            "Weight": 0,
+        },
         [
             ui.HGroup(
                 {
                     "Spacing": 5,
+                    "Weight": 0,
                 },
                 [
-                    ui.LineEdit(
-                        {
-                            "PlaceholderText": "This is a placeholder"
-                        }
-                    ),
-                    ui.LineEdit(
-                        {
-                            "PlaceholderText": "This is another placeholder"
-                        }
-                    ),
+                    ui.LineEdit({"PlaceholderText": "Text Field"}),
+                    ui.LineEdit({"PlaceholderText": "Text Field"}),
                 ],
             ),
             ui.HGroup(
                 {
                     "Spacing": 5,
+                    "Weight": 0,
                 },
                 [
                     ui.Button({"Text": "Clear", "Weight": 0, "Height": 0}),
                     ui.Button({"Text": "Find", "Weight": 0, "Height": 0}),
+                    ui.Button({"Text": "Replace", "Weight": 0, "Height": 0}),
                 ],
             ),
             ui.LineEdit(
@@ -61,3 +59,6 @@ win.On.myWindow.Close = OnClose
 
 win.Show()
 dispatcher.RunLoop()
+
+itm = win.GetItems()
+print(itm)
