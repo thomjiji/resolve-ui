@@ -1,3 +1,4 @@
+from cmath import pi
 import glob
 import os
 from turtle import numinput
@@ -18,6 +19,8 @@ testID = "Test click"
 pathTreeID = "Path tree"
 addPathID = "Add path"
 clearPathID = "Clear all path"
+clearSelectedPathID = "Clear selected path"
+comboBoxID = "Combox Box"
 
 # Define the window UI layout
 win = dispatcher.AddWindow(
@@ -51,15 +54,42 @@ win = dispatcher.AddWindow(
                         {
                             "ID": inputID,
                             "PlaceholderText": "Text Field",
+                            "MaxLength": 10,
                         }
                     ),
+                    ui.HGap(3),
                     ui.SpinBox(
                         {
-                            "Value": 2,
-                            "Minimum": 1,
+                            "Value": 0,
+                            "Minimum": 0,
                             "Maximum": 99,
                             "SingleStep": 1,
-                            "Weight": 0,
+                            "Prefix": "The ",
+                            "Suffix": " Items",
+                            "Weight": 0.5,
+                        }
+                    ),
+                    ui.Slider(
+                        {
+                            "Value": 0,
+                            "Minimum": 0,
+                            "Maximum": 100,
+                            "SliderPosition": "Center",
+                        }
+                    ),
+                    ui.ComboBox(
+                        {
+                            "ID": comboBoxID,
+                            "TextItem": 'xxx',
+                            "Editable": True,
+                            # "CurrentText": "Info down below",
+                        }
+                    ),
+                    ui.CheckBox(
+                        {
+                            "Text": "CheckOrNot",
+                            "Checkable": True,
+                            "Checked": False,
                         }
                     ),
                 ],
@@ -93,6 +123,13 @@ win = dispatcher.AddWindow(
                     ),
                     ui.Button(
                         {
+                            "ID": clearSelectedPathID,
+                            "Text": "Remove Selected Path",
+                            "Weight": 0,
+                        },
+                    ),
+                    ui.Button(
+                        {
                             "ID": clearPathID,
                             "Text": "Clear All Path",
                             "Weight": 0,
@@ -107,6 +144,7 @@ win = dispatcher.AddWindow(
                     "HeaderHidden": True,
                     "SelectionMode": "ExtendedSelection",
                     "Weight": 1,
+                    "AutoScroll": True,
                 }
             ),
         ],
@@ -114,7 +152,6 @@ win = dispatcher.AddWindow(
 )
 
 itm = win.GetItems()
-
 
 # Define the events handlers
 def on_close(ev):
@@ -126,11 +163,13 @@ def on_create_bin(ev):
     toolkits.add_subfolders(media_pool, root_folder, path)
 
 
-def test_click(ev):
+def on_test_click(ev):
+    # current_tree_item = itm[pathTreeID].CurrentItem()
+    # print(f"current TreeItem object is {current_tree_item}.")
     print(f"{itm[inputID].Text}")
 
 
-def add_tree(ev):
+def on_add_tree(ev):
     top_level_items = []
     row = itm[pathTreeID].NewItem()
     row.Text[0] = itm[inputID].Text
@@ -138,16 +177,35 @@ def add_tree(ev):
     itm[pathTreeID].AddTopLevelItems(top_level_items)
 
 
-def clear_path(ev):
+def on_clear_all_path(ev):
     itm[pathTreeID].Clear()
+
+
+def on_click_tree_item(ev):
+    current_item = itm[pathTreeID].CurrentItem()
+    print(current_item)
+
+
+def on_remove_select_tree_item(ev):
+    current_selection = itm[pathTreeID].CurrentItem()
+    itm[pathTreeID].RemoveChild(current_selection)
+
+
+def on_combox_box_pressed(ev):
+    itm[comboBoxID].AddItem(itm[inputID].Text)
+    itm[comboBoxID].ClearEditText()
 
 
 # Assign events handlers
 win.On.myWindow.Close = on_close
 win.On[createBinID].Clicked = on_create_bin
-win.On[testID].Clicked = test_click
-win.On[addPathID].Clicked = add_tree
-win.On[clearPathID].Clicked = clear_path
+win.On[testID].Clicked = on_test_click
+win.On[addPathID].Clicked = on_add_tree
+win.On[clearPathID].Clicked = on_clear_all_path
+win.On[pathTreeID].ItemClicked = on_click_tree_item
+win.On[clearSelectedPathID].Clicked = on_remove_select_tree_item
+win.On[comboBoxID].ReturnPressed = on_combox_box_pressed
+
 
 
 if __name__ == "__main__":

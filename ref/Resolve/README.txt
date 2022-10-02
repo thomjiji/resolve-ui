@@ -223,7 +223,7 @@ Some elements have extra functions of their own:
 						Clear(), rect VisualItemRect(item), SetHeaderLabels(list), SetHeaderItem(item), InsertTopLevelItems(list), AddTopLevelItems(list),
 						list SelectedItems(), list FindItems(string, flags), SortItems(int, order), ScrollToItem(item), ResetIndentation(), 
 						SortByColumn(int, order), int FrameWidth()
-	TreeItem:			AddChild(item), InsertChild(item), RemoveChild(iitem), SortChildren(int, order), InsertChildren(int, list), AddChildren(list),
+	TreeItem:			AddChild(item), InsertChild(item), RemoveChild(item), SortChildren(int, order), InsertChildren(int, list), AddChildren(list),
 						int IndexOfChild(item), item Clone(), tree TreeWidget(), item Parent(), item Child(int), item TakeChild(int),
 						int ChildCount(), int ColumnCount()
 	Window:				Show(), Hide(), RecalcLayout()
