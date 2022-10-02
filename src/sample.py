@@ -14,9 +14,10 @@ dispatcher = bmd.UIDispatcher(ui)
 
 createBinID = "Create bin"
 inputID = "Input field"
-testClickID = "Test click"
+testID = "Test click"
 pathTreeID = "Path tree"
-showPathID = "Show path"
+addPathID = "Add path"
+clearPathID = "Clear all path"
 
 # Define the window UI layout
 win = dispatcher.AddWindow(
@@ -30,6 +31,16 @@ win = dispatcher.AddWindow(
             "Weight": 0,
         },
         [
+            ui.Label(
+                {
+                    "Text": "Test Window - thomjiji",
+                    "Weight": 0,
+                    "Alignment": {
+                        "AlignHCenter": True,
+                        "AlignVCenter": True,
+                    },
+                },
+            ),
             ui.HGroup(
                 {
                     "Spacing": 5,
@@ -42,6 +53,15 @@ win = dispatcher.AddWindow(
                             "PlaceholderText": "Text Field",
                         }
                     ),
+                    ui.SpinBox(
+                        {
+                            "Value": 2,
+                            "Minimum": 1,
+                            "Maximum": 99,
+                            "SingleStep": 1,
+                            "Weight": 0,
+                        }
+                    ),
                 ],
             ),
             ui.HGroup(
@@ -52,6 +72,13 @@ win = dispatcher.AddWindow(
                 [
                     ui.Button(
                         {
+                            "ID": testID,
+                            "Text": "Test",
+                            "Weight": 0,
+                        }
+                    ),
+                    ui.Button(
+                        {
                             "ID": createBinID,
                             "Text": "Create bin",
                             "Weight": 0,
@@ -59,33 +86,19 @@ win = dispatcher.AddWindow(
                     ),
                     ui.Button(
                         {
-                            "ID": testClickID,
-                            "Text": "Test Click",
+                            "ID": addPathID,
+                            "Text": "Add Path",
                             "Weight": 0,
-                        }
+                        },
                     ),
                     ui.Button(
                         {
-                            "ID": showPathID,
-                            "Text": "Show Path",
+                            "ID": clearPathID,
+                            "Text": "Clear All Path",
                             "Weight": 0,
                         },
                     ),
                 ],
-            ),
-            ui.LineEdit(
-                {
-                    "PlaceholderText": "example text",
-                }
-            ),
-            ui.SpinBox(
-                {
-                    "Value": 2,
-                    "Minimum": 1,
-                    "Maximum": 99,
-                    "SingleStep": 1,
-                    "Weight": 0,
-                }
             ),
             ui.Tree(
                 {
@@ -93,7 +106,7 @@ win = dispatcher.AddWindow(
                     "AlternatingRowColors": True,
                     "HeaderHidden": True,
                     "SelectionMode": "ExtendedSelection",
-                    "Weight": 2,
+                    "Weight": 1,
                 }
             ),
         ],
@@ -117,7 +130,7 @@ def test_click(ev):
     print(f"{itm[inputID].Text}")
 
 
-def show_tree(ev):
+def add_tree(ev):
     top_level_items = []
     row = itm[pathTreeID].NewItem()
     row.Text[0] = itm[inputID].Text
@@ -125,11 +138,16 @@ def show_tree(ev):
     itm[pathTreeID].AddTopLevelItems(top_level_items)
 
 
+def clear_path(ev):
+    itm[pathTreeID].Clear()
+
+
 # Assign events handlers
 win.On.myWindow.Close = on_close
 win.On[createBinID].Clicked = on_create_bin
-win.On[testClickID].Clicked = test_click
-win.On[showPathID].Clicked = show_tree
+win.On[testID].Clicked = test_click
+win.On[addPathID].Clicked = add_tree
+win.On[clearPathID].Clicked = clear_path
 
 
 if __name__ == "__main__":
