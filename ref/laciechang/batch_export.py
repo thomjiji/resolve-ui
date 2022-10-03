@@ -1,4 +1,6 @@
-import os, subprocess, platform
+import os
+import platform
+import subprocess
 
 resolve = bmd.scriptapp("Resolve")
 fu = bmd.scriptapp("Fusion")

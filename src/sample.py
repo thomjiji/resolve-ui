@@ -9,6 +9,7 @@ root_folder = media_pool.get_root_folder()
 media_storage = resolve.get_media_stroage()
 
 ui = fusion.UIManager
+fu = bmd.scriptapp("Fusion")
 dispatcher = bmd.UIDispatcher(ui)
 
 createBinID = "Create bin"
@@ -20,6 +21,7 @@ clearPathID = "Clear all path"
 clearSelectedPathID = "Clear selected path"
 comboBoxID = "Combo Box"
 pathParseID = "Parse input path"
+browseFileManagerID = "Browse"
 
 # Define the window UI layout
 win = dispatcher.AddWindow(
@@ -49,6 +51,12 @@ win = dispatcher.AddWindow(
                     "Weight": 0,
                 },
                 [
+                    ui.Label(
+                        {
+                            "Text": "Location",
+                            "Weight": 0,
+                        }
+                    ),
                     ui.LineEdit(
                         {
                             "ID": inputPathID,
@@ -58,8 +66,8 @@ win = dispatcher.AddWindow(
                     ),
                     ui.Button(
                         {
-                            "ID": pathParseID,
-                            "Text": "Parse Path",
+                            "ID": browseFileManagerID,
+                            "Text": "Browse",
                             "Weight": 0,
                         }
                     ),
@@ -94,17 +102,17 @@ win = dispatcher.AddWindow(
                     ),
                     ui.Button(
                         {
-                            "ID": clearSelectedPathID,
-                            "Text": "Remove Selected Path",
+                            "ID": clearPathID,
+                            "Text": "Clear All Path",
                             "Weight": 0,
                         },
                     ),
                     ui.Button(
                         {
-                            "ID": clearPathID,
-                            "Text": "Clear All Path",
+                            "ID": pathParseID,
+                            "Text": "Parse Path",
                             "Weight": 0,
-                        },
+                        }
                     ),
                 ],
             ),
@@ -181,8 +189,6 @@ def on_create_bin(ev):
 
 
 def on_test_click(ev):
-    # current_tree_item = itm[pathTreeID].CurrentItem()
-    # print(f"current TreeItem object is {current_tree_item}.")
     print(f"{itm[inputPathID].Text}")
 
 
@@ -214,16 +220,16 @@ def on_parse_input_path(ev):
     itm[inputPathID].AddTopLevelItems(top_level_items)
 
 
+def on_click_browse_button(ev):
+    selected = fu.RequestDir()
+    itm[inputPathID].Text = str(selected)
+    return selected
+
+
 def on_click_tree_item(ev):
     # about to change
     current_item = itm[pathTreeID].TreePosition
     print(current_item)
-
-
-# not work yet
-def on_remove_select_tree_item(ev):
-    current_selection = itm[pathTreeID].CurrentItem()
-    itm[pathTreeID].RemoveChild(current_selection)
 
 
 # Assign events handlers
@@ -233,8 +239,8 @@ win.On[testID].Clicked = on_test_click
 win.On[addPathID].Clicked = on_add_tree
 win.On[clearPathID].Clicked = on_clear_all_path
 win.On[pathTreeID].ItemClicked = on_click_tree_item
-win.On[clearSelectedPathID].Clicked = on_remove_select_tree_item
 win.On[pathParseID].Clicked = on_parse_input_path
+win.On[browseFileManagerID].Clicked = on_click_browse_button
 
 if __name__ == "__main__":
     win.Show()
