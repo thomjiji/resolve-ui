@@ -1,7 +1,4 @@
-from cmath import pi
-import glob
 import os
-from turtle import numinput
 from pybmd import Bmd
 from pybmd import toolkits
 
@@ -9,18 +6,20 @@ resolve = Bmd()
 project = resolve.get_project_manager().get_current_project()
 media_pool = project.get_media_pool()
 root_folder = media_pool.get_root_folder()
+media_storage = resolve.get_media_stroage()
 
 ui = fusion.UIManager
 dispatcher = bmd.UIDispatcher(ui)
 
 createBinID = "Create bin"
-inputID = "Input field"
+inputPathID = "Input path"
 testID = "Test click"
 pathTreeID = "Path tree"
 addPathID = "Add path"
 clearPathID = "Clear all path"
 clearSelectedPathID = "Clear selected path"
 comboBoxID = "Combo Box"
+pathParseID = "Parse input path"
 
 # Define the window UI layout
 win = dispatcher.AddWindow(
@@ -52,44 +51,16 @@ win = dispatcher.AddWindow(
                 [
                     ui.LineEdit(
                         {
-                            "ID": inputID,
-                            "PlaceholderText": "Text Field",
-                            "MaxLength": 10,
+                            "ID": inputPathID,
+                            "PlaceholderText": "Please enter the media full path here",
+                            # "MaxLength": 10,
                         }
                     ),
-                    ui.HGap(3),
-                    ui.SpinBox(
+                    ui.Button(
                         {
-                            "Value": 0,
-                            "Minimum": 0,
-                            "Maximum": 99,
-                            "SingleStep": 1,
-                            "Prefix": "The ",
-                            "Suffix": " Items",
-                            "Weight": 0.5,
-                        }
-                    ),
-                    ui.Slider(
-                        {
-                            "Value": 0,
-                            "Minimum": 0,
-                            "Maximum": 100,
-                            "SliderPosition": "Center",
-                        }
-                    ),
-                    ui.ComboBox(
-                        {
-                            "ID": comboBoxID,
-                            "Editable": False,
-                            "Enable": True,
-                            # "CurrentText": "Info down below",
-                        }
-                    ),
-                    ui.CheckBox(
-                        {
-                            "Text": "Check Or Not",
-                            "Checkable": True,
-                            "Checked": False,
+                            "ID": pathParseID,
+                            "Text": "Parse Path",
+                            "Weight": 0,
                         }
                     ),
                 ],
@@ -147,6 +118,47 @@ win = dispatcher.AddWindow(
                     "AutoScroll": True,
                 }
             ),
+            ui.HGroup(
+                {
+                    "Weight": 0,
+                },
+                [
+                    ui.SpinBox(
+                        {
+                            "Value": 0,
+                            "Minimum": 0,
+                            "Maximum": 99,
+                            "SingleStep": 1,
+                            "Prefix": "The ",
+                            "Suffix": " Items",
+                            "Weight": 0.5,
+                        }
+                    ),
+                    ui.Slider(
+                        {
+                            "Value": 0,
+                            "Minimum": 0,
+                            "Maximum": 100,
+                            "SliderPosition": "Center",
+                        }
+                    ),
+                    ui.ComboBox(
+                        {
+                            "ID": comboBoxID,
+                            "Editable": False,
+                            "Enable": True,
+                            # "CurrentText": "Info down below",
+                        }
+                    ),
+                    ui.CheckBox(
+                        {
+                            "Text": "Check Or Not",
+                            "Checkable": True,
+                            "Checked": False,
+                        }
+                    ),
+                ],
+            ),
         ],
     ),
 )
@@ -154,26 +166,30 @@ win = dispatcher.AddWindow(
 itm = win.GetItems()
 itm[comboBoxID].AddItems(["From Premiere", "From Baselight"])
 
+
+# Genaral functions
+
+
 # Define the events handlers
 def on_close(ev):
     dispatcher.ExitLoop()
 
 
 def on_create_bin(ev):
-    path = itm[inputID].Text
+    path = itm[inputPathID].Text
     toolkits.add_subfolders(media_pool, root_folder, path)
 
 
 def on_test_click(ev):
     # current_tree_item = itm[pathTreeID].CurrentItem()
     # print(f"current TreeItem object is {current_tree_item}.")
-    print(f"{itm[inputID].Text}")
+    print(f"{itm[inputPathID].Text}")
 
 
 def on_add_tree(ev):
     top_level_items = []
     row = itm[pathTreeID].NewItem()
-    row.Text[0] = itm[inputID].Text
+    row.Text[0] = itm[inputPathID].Text
     top_level_items.append(row)
     itm[pathTreeID].AddTopLevelItems(top_level_items)
 
@@ -182,11 +198,29 @@ def on_clear_all_path(ev):
     itm[pathTreeID].Clear()
 
 
+def on_parse_input_path(ev):
+    input_path = itm[inputPathID].Text
+    # 从 input path 的 raw 路径里，通过 get_sub_folder_list 方法拿到该 raw 路径下的
+    # 子路径
+    input_subpath_list = media_storage.get_sub_folder_list(input_path)
+    cam_name = [os.path.split(i)[1] for i in input_subpath_list]
+    print(cam_name)
+
+    top_level_items = []
+    for i in cam_name:
+        row = itm[pathTreeID].NewItem()
+        row.Text[0] = i
+        top_level_items.append(row)
+    itm[inputPathID].AddTopLevelItems(top_level_items)
+
+
 def on_click_tree_item(ev):
-    current_item = itm[pathTreeID].CurrentItem()
+    # about to change
+    current_item = itm[pathTreeID].TreePosition
     print(current_item)
 
 
+# not work yet
 def on_remove_select_tree_item(ev):
     current_selection = itm[pathTreeID].CurrentItem()
     itm[pathTreeID].RemoveChild(current_selection)
@@ -200,7 +234,7 @@ win.On[addPathID].Clicked = on_add_tree
 win.On[clearPathID].Clicked = on_clear_all_path
 win.On[pathTreeID].ItemClicked = on_click_tree_item
 win.On[clearSelectedPathID].Clicked = on_remove_select_tree_item
-
+win.On[pathParseID].Clicked = on_parse_input_path
 
 if __name__ == "__main__":
     win.Show()
