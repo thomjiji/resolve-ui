@@ -242,11 +242,8 @@ def on_clear_all_path(ev):
 
 
 def on_parse_input_path(ev):
-    """Extract the camera name under the input path and add it to the tree."""
+    """Extract the sub paths under the input path and add them to the tree."""
     input_path = itm[inputPathID].Text
-    # From the raw path of the input path, get the sub path through the get_sub_folder_list method
-    input_subpath_list = media_storage.get_sub_folder_list(input_path)
-    # cam_name = [os.path.split(i)[1] for i in input_subpath_list]
     all_files_abs = get_sorted_path(input_path)
     pprint(all_files_abs)
 
