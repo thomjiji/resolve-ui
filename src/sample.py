@@ -20,7 +20,7 @@ pathTreeID = "Path tree"
 addPathID = "Add path"
 clearPathID = "Clear all path"
 clearSelectedPathID = "Clear selected path"
-comboBoxID = "Combox Box"
+comboBoxID = "Combo Box"
 
 # Define the window UI layout
 win = dispatcher.AddWindow(
@@ -80,14 +80,14 @@ win = dispatcher.AddWindow(
                     ui.ComboBox(
                         {
                             "ID": comboBoxID,
-                            "TextItem": 'xxx',
-                            "Editable": True,
+                            "Editable": False,
+                            "Enable": True,
                             # "CurrentText": "Info down below",
                         }
                     ),
                     ui.CheckBox(
                         {
-                            "Text": "CheckOrNot",
+                            "Text": "Check Or Not",
                             "Checkable": True,
                             "Checked": False,
                         }
@@ -152,6 +152,7 @@ win = dispatcher.AddWindow(
 )
 
 itm = win.GetItems()
+itm[comboBoxID].AddItems(["From Premiere", "From Baselight"])
 
 # Define the events handlers
 def on_close(ev):
@@ -191,11 +192,6 @@ def on_remove_select_tree_item(ev):
     itm[pathTreeID].RemoveChild(current_selection)
 
 
-def on_combox_box_pressed(ev):
-    itm[comboBoxID].AddItem(itm[inputID].Text)
-    itm[comboBoxID].ClearEditText()
-
-
 # Assign events handlers
 win.On.myWindow.Close = on_close
 win.On[createBinID].Clicked = on_create_bin
@@ -204,8 +200,6 @@ win.On[addPathID].Clicked = on_add_tree
 win.On[clearPathID].Clicked = on_clear_all_path
 win.On[pathTreeID].ItemClicked = on_click_tree_item
 win.On[clearSelectedPathID].Clicked = on_remove_select_tree_item
-win.On[comboBoxID].ReturnPressed = on_combox_box_pressed
-
 
 
 if __name__ == "__main__":
