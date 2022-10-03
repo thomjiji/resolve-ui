@@ -60,7 +60,7 @@ win = dispatcher.AddWindow(
                     ui.LineEdit(
                         {
                             "ID": inputPathID,
-                            "PlaceholderText": "Please enter the media full path here",
+                            "ClearButtonEnabled": True,
                             # "MaxLength": 10,
                         }
                     ),
@@ -120,10 +120,11 @@ win = dispatcher.AddWindow(
                 {
                     "ID": pathTreeID,
                     "AlternatingRowColors": True,
-                    "HeaderHidden": True,
+                    "HeaderHidden": False,
                     "SelectionMode": "ExtendedSelection",
                     "Weight": 1,
                     "AutoScroll": True,
+                    "SortingEnabled": True,
                 }
             ),
             ui.HGroup(
@@ -173,10 +174,10 @@ win = dispatcher.AddWindow(
 
 itm = win.GetItems()
 itm[comboBoxID].AddItems(["From Premiere", "From Baselight"])
+itm[pathTreeID].SetHeaderLabel("Camera Name")
 
 
-# Genaral functions
-
+# General functions
 
 
 # Define the events handlers
@@ -206,9 +207,9 @@ def on_clear_all_path(ev):
 
 
 def on_parse_input_path(ev):
+    """Extract the camera name under the input path and add it to the tree."""
     input_path = itm[inputPathID].Text
-    # 从 input path 的 raw 路径里，通过 get_sub_folder_list 方法拿到该 raw 路径下的
-    # 子路径
+    # From the raw path of the input path, get the sub path through the get_sub_folder_list method
     input_subpath_list = media_storage.get_sub_folder_list(input_path)
     cam_name = [os.path.split(i)[1] for i in input_subpath_list]
     print(cam_name)
@@ -218,7 +219,7 @@ def on_parse_input_path(ev):
         row = itm[pathTreeID].NewItem()
         row.Text[0] = i
         top_level_items.append(row)
-    itm[inputPathID].AddTopLevelItems(top_level_items)
+    itm[pathTreeID].AddTopLevelItems(top_level_items)
 
 
 def on_click_browse_button(ev):

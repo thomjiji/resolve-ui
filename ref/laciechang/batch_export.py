@@ -654,7 +654,7 @@ def export_in_project(projectName):
                             + itm[NameSuffix].Text
                             + Timeline_Type[type_name]["suffix"]
                         )
-                        o = p.export_timeline(
+                        p.export_timeline(
                             name, output_folder, Timeline_Type[type_name]["type"]
                         )
                     except:
@@ -666,7 +666,7 @@ def export_in_project(projectName):
                     + itm[NameSuffix].Text
                     + Timeline_Type[type_name]["suffix"]
                 )
-                o = p.export_timeline(
+                p.export_timeline(
                     name, output_folder, Timeline_Type[type_name]["type"]
                 )
             else:
