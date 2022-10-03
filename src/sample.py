@@ -1,6 +1,9 @@
 import os
+from pprint import pprint
 from pybmd import Bmd
 from pybmd import toolkits
+
+INVALID_EXTENSION = ["DS_Store", "JPG", "JPEG", "SRT"]
 
 resolve = Bmd()
 project = resolve.get_project_manager().get_current_project()
@@ -171,16 +174,48 @@ win = dispatcher.AddWindow(
         ],
     ),
 )
-
 itm = win.GetItems()
+
 itm[comboBoxID].AddItems(["From Premiere", "From Baselight"])
 itm[pathTreeID].SetHeaderLabel("Camera Name")
 
 
 # General functions
+def absolute_file_paths(path: str) -> list:
+    """
+    Get the abs of all files from the input path, exclude files from INVALID_EXTENSION.
+    """
+    absolute_file_path_list = []
+    for directory_path, _, filenames in os.walk(path):
+        for filename in filenames:
+            # Exclude invalid extension when getting abs for all files under the input media path (素材)
+            if filename.split(".")[1] not in INVALID_EXTENSION:
+                pprint(filename)
+                absolute_file_path_list.append(
+                    os.path.abspath(os.path.join(directory_path, filename))
+                )
+
+    return absolute_file_path_list
 
 
-# Define the events handlers
+def get_sorted_path(path: str) -> list:
+    """
+    Get the abs of all files from the input path, then sort the abs,
+    and finally return a list of sorted abs.
+    """
+    filename_and_fullpath_dict = {
+        os.path.basename(os.path.splitext(path)[0]): path
+        for path in absolute_file_paths(path)
+    }
+    filenames = list(filename_and_fullpath_dict.keys())
+    filenames.sort()
+    fullpaths = [
+        filename_and_fullpath_dict.get(i) for i in filenames
+    ]
+    return fullpaths
+
+
+# Events handlers
 def on_close(ev):
     dispatcher.ExitLoop()
 
@@ -211,11 +246,12 @@ def on_parse_input_path(ev):
     input_path = itm[inputPathID].Text
     # From the raw path of the input path, get the sub path through the get_sub_folder_list method
     input_subpath_list = media_storage.get_sub_folder_list(input_path)
-    cam_name = [os.path.split(i)[1] for i in input_subpath_list]
-    print(cam_name)
+    # cam_name = [os.path.split(i)[1] for i in input_subpath_list]
+    all_files_abs = get_sorted_path(input_path)
+    pprint(all_files_abs)
 
     top_level_items = []
-    for i in cam_name:
+    for i in all_files_abs:
         row = itm[pathTreeID].NewItem()
         row.Text[0] = i
         top_level_items.append(row)
