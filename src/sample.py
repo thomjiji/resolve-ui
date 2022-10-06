@@ -301,12 +301,13 @@ def on_click_tree_item(ev):
 
 def on_clear_all(ev):
     """For the convenience of development, clear all the content in the media
-    pool with one click.
+    pool and switch back to Edit page with one click.
     """
     all_timeline = get_all_timeline()
     media_pool.delete_timelines(all_timeline)
     subfolders_to_be_deleted = root_folder.get_sub_folder_list()
     media_pool.delete_folders(subfolders_to_be_deleted)
+    resolve.open_page("edit")
 
 
 # Assign events handlers
