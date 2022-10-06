@@ -24,7 +24,7 @@ logoPath = fusion.MapPath(
 )
 header = '<html><body><h1 style="vertical-align:middle;">'
 header = header + '<img src="' + logoPath + '"/>&nbsp;&nbsp;&nbsp;'
-header = header + "<b>Resolve Sample Workflow Integration Script</b>"
+header = header + "<b>Resolve_Workflow_Integrations Sample Workflow Integration Script</b>"
 header = header + "</h1></body></html>"
 
 # define the window UI layout
@@ -32,7 +32,7 @@ win = dispatcher.AddWindow(
     {
         "ID": winID,
         "Geometry": [100, 100, 600, 500],
-        "WindowTitle": "Resolve Sample Workflow Script",
+        "WindowTitle": "Resolve_Workflow_Integrations Sample Workflow Script",
     },
     ui.VGroup(
         [

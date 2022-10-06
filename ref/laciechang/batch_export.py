@@ -2,7 +2,7 @@ import os
 import platform
 import subprocess
 
-resolve = bmd.scriptapp("Resolve")
+resolve = bmd.scriptapp("Resolve_Workflow_Integrations")
 fu = bmd.scriptapp("Fusion")
 ui = fu.UIManager
 disp = bmd.UIDispatcher(ui)
@@ -90,7 +90,7 @@ Timeline_Type = {
         "suffix": ".aaf",
         "type": [resolve.EXPORT_AAF, resolve.EXPORT_AAF_NEW],
     },
-    "DaVinci Resolve Timeline": {
+    "DaVinci Resolve_Workflow_Integrations Timeline": {
         "suffix": ".drt",
         "type": resolve.EXPORT_DRT,
     },

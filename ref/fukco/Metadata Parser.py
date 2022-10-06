@@ -148,7 +148,7 @@ if __name__ == "__main__":
     logger.addHandler(ch)
 
     logger.info("Processing...")
-    resolve = get_bmd().scriptapp("Resolve")
+    resolve = get_bmd().scriptapp("Resolve_Workflow_Integrations")
     projectManager = resolve.GetProjectManager()
     project = projectManager.GetCurrentProject()
     mediaPool = project.GetMediaPool()

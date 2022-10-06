@@ -195,7 +195,7 @@ def icon_gen(bgr):
     return tmp_file.name
 
 
-def getresolve(app="Resolve"):
+def getresolve(app="Resolve_Workflow_Integrations"):
     return bmd.scriptapp(app)
 
 

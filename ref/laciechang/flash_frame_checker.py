@@ -143,7 +143,7 @@ class SMPTE(object):
 
 class Resolve:
     def __init__(self) -> None:
-        self.resolve = bmd.scriptapp("Resolve")
+        self.resolve = bmd.scriptapp("Resolve_Workflow_Integrations")
         self.projectmanager = self.resolve.GetProjectManager()
         self.mediastorage = self.resolve.GetMediaStorage()
         self.currentproject = self.projectmanager.GetCurrentProject()

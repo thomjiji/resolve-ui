@@ -1,9 +1,10 @@
 import os
 from pprint import pprint
-from typing import List
+from typing import List, Dict
 from pybmd import Bmd
 from pybmd import toolkits
 from pybmd import timeline as bmd_timeline
+from pybmd import folder as bmd_folder
 
 INVALID_EXTENSION = ["DS_Store", "JPG", "JPEG", "SRT"]
 
@@ -234,6 +235,18 @@ def get_all_timeline() -> List[bmd_timeline.Timeline]:
     return all_timeline
 
 
+def get_subfolder_by_name(subfolder_name: str) -> bmd_folder.Folder:
+    """Get subfolder (Folder object) under the root folder in the media
+    pool.
+    """
+    all_subfolder = root_folder.get_sub_folder_list()
+    subfolder_dict: Dict[str, bmd_folder.Folder] = {
+        subfolder.get_name(): subfolder
+        for subfolder in all_subfolder
+    }
+    return subfolder_dict.get(subfolder_name, "")
+
+
 # Events handlers
 def on_close(ev):
     dispatcher.ExitLoop()
@@ -287,8 +300,13 @@ def on_click_tree_item(ev):
 
 
 def on_clear_all(ev):
+    """For the convenience of development, clear all the content in the media
+    pool with one click.
+    """
     all_timeline = get_all_timeline()
     media_pool.delete_timelines(all_timeline)
+    subfolders_to_be_deleted = root_folder.get_sub_folder_list()
+    media_pool.delete_folders(subfolders_to_be_deleted)
 
 
 # Assign events handlers

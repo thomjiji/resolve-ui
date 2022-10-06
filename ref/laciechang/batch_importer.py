@@ -11,7 +11,7 @@ import glob
 import time
 
 fu = bmd.scriptapp("Fusion")
-resolve = bmd.scriptapp("Resolve")
+resolve = bmd.scriptapp("Resolve_Workflow_Integrations")
 pj = resolve.GetProjectManager().GetCurrentProject()
 
 ui = fu.UIManager
