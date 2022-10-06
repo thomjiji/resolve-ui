@@ -1,7 +1,9 @@
 import os
 from pprint import pprint
+from typing import List
 from pybmd import Bmd
 from pybmd import toolkits
+from pybmd import timeline as bmd_timeline
 
 INVALID_EXTENSION = ["DS_Store", "JPG", "JPEG", "SRT"]
 
@@ -11,8 +13,8 @@ media_pool = project.get_media_pool()
 root_folder = media_pool.get_root_folder()
 media_storage = resolve.get_media_stroage()
 
+fusion = bmd.scriptapp("Fusion")
 ui = fusion.UIManager
-fu = bmd.scriptapp("Fusion")
 dispatcher = bmd.UIDispatcher(ui)
 
 createBinID = "Create bin"
@@ -25,6 +27,7 @@ clearSelectedPathID = "Clear selected path"
 comboBoxID = "Combo Box"
 pathParseID = "Parse input path"
 browseFileManagerID = "Browse"
+clearAllContentID = "Clear all content in the media pool"
 
 # Define the window UI layout
 win = dispatcher.AddWindow(
@@ -117,6 +120,12 @@ win = dispatcher.AddWindow(
                             "Weight": 0,
                         }
                     ),
+                    ui.Button(
+                        {
+                            "ID": clearAllContentID,
+                            "Text": "Clear All",
+                        }
+                    ),
                 ],
             ),
             ui.Tree(
@@ -181,16 +190,16 @@ itm[pathTreeID].SetHeaderLabel("Camera Name")
 
 
 # General functions
-def absolute_file_paths(path: str) -> list:
-    """
-    Get the abs of all files from the input path, exclude files from INVALID_EXTENSION.
+def absolute_file_paths(path: str) -> List[str]:
+    """Get the abs of all files from the input path, exclude files from
+    INVALID_EXTENSION.
     """
     absolute_file_path_list = []
     for directory_path, _, filenames in os.walk(path):
         for filename in filenames:
-            # Exclude invalid extension when getting abs for all files under the input media path (素材)
+            # Exclude invalid extension when getting abs for all files under the
+            # input media path (素材)
             if filename.split(".")[1] not in INVALID_EXTENSION:
-                pprint(filename)
                 absolute_file_path_list.append(
                     os.path.abspath(os.path.join(directory_path, filename))
                 )
@@ -198,9 +207,8 @@ def absolute_file_paths(path: str) -> list:
     return absolute_file_path_list
 
 
-def get_sorted_path(path: str) -> list:
-    """
-    Get the abs of all files from the input path, then sort the abs,
+def get_sorted_path(path: str) -> List[str]:
+    """Get the abs of all files from the input path, then sort the abs,
     and finally return a list of sorted abs.
     """
     filename_and_fullpath_dict = {
@@ -209,10 +217,21 @@ def get_sorted_path(path: str) -> list:
     }
     filenames = list(filename_and_fullpath_dict.keys())
     filenames.sort()
-    fullpaths = [
-        filename_and_fullpath_dict.get(i) for i in filenames
-    ]
+    fullpaths = [filename_and_fullpath_dict.get(i, "") for i in filenames]
     return fullpaths
+
+
+def get_all_timeline() -> List[bmd_timeline.Timeline]:
+    """Get all existing timelines. Return a list containing timeline object.
+
+    Returns:
+        A list containing all the timeline object in the media pool.
+
+    """
+    all_timeline = []
+    for timeline_index in range(1, project.get_timeline_count() + 1, 1):
+        all_timeline.append(project.get_timeline_by_index(timeline_index))
+    return all_timeline
 
 
 # Events handlers
@@ -256,7 +275,7 @@ def on_parse_input_path(ev):
 
 
 def on_click_browse_button(ev):
-    selected = fu.RequestDir()
+    selected = fusion.RequestDir()
     itm[inputPathID].Text = str(selected)
     return selected
 
@@ -265,6 +284,11 @@ def on_click_tree_item(ev):
     # about to change
     current_item = itm[pathTreeID].TreePosition
     print(current_item)
+
+
+def on_clear_all(ev):
+    all_timeline = get_all_timeline()
+    media_pool.delete_timelines(all_timeline)
 
 
 # Assign events handlers
@@ -276,6 +300,7 @@ win.On[clearPathID].Clicked = on_clear_all_path
 win.On[pathTreeID].ItemClicked = on_click_tree_item
 win.On[pathParseID].Clicked = on_parse_input_path
 win.On[browseFileManagerID].Clicked = on_click_browse_button
+win.On[clearAllContentID].Clicked = on_clear_all
 
 if __name__ == "__main__":
     win.Show()
