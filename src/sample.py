@@ -337,13 +337,13 @@ def on_parse_input_path(ev):
 
 def on_click_input_browse_button(ev):
     selected = fusion.RequestDir()
-    itm[inputPathID].Text = str(selected)
+    itm[inputPathID].Text = str(selected)[:-1]
     return selected
 
 
 def on_click_output_browse_button(ev):
     selected = fusion.RequestDir()
-    itm[outputPathID].Text = str(selected)
+    itm[outputPathID].Text = str(selected)[:-1]
     return selected
 
 
