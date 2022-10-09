@@ -1,6 +1,8 @@
 import os
 from pprint import pprint
+from select import select
 from typing import List, Dict
+from proxy import main
 from pybmd import Bmd
 from pybmd import toolkits
 from pybmd import timeline as bmd_timeline
@@ -20,6 +22,7 @@ dispatcher = bmd.UIDispatcher(ui)
 
 createBinID = "Create bin"
 inputPathID = "Input path"
+outputPathID = "Output path"
 testID = "Test click"
 pathTreeID = "Path tree"
 addPathID = "Add path"
@@ -27,8 +30,10 @@ clearPathID = "Clear all path"
 clearSelectedPathID = "Clear selected path"
 comboBoxID = "Combo Box"
 pathParseID = "Parse input path"
-browseFileManagerID = "Browse"
+browseInputFileManagerID = "Browse input"
+browseOutputFileManagerID = "Browse output"
 clearAllContentID = "Clear all content in the media pool"
+ProxyRunID = "Proxy run"
 
 # Define the window UI layout
 win = dispatcher.AddWindow(
@@ -60,10 +65,11 @@ win = dispatcher.AddWindow(
                 [
                     ui.Label(
                         {
-                            "Text": "Location",
+                            "Text": "Input path",
                             "Weight": 0,
                         }
                     ),
+                    ui.HGap(2),
                     ui.LineEdit(
                         {
                             "ID": inputPathID,
@@ -73,7 +79,35 @@ win = dispatcher.AddWindow(
                     ),
                     ui.Button(
                         {
-                            "ID": browseFileManagerID,
+                            "ID": browseInputFileManagerID,
+                            "Text": "Browse",
+                            "Weight": 0,
+                        }
+                    ),
+                ],
+            ),
+            ui.HGroup(
+                {
+                    "Spacing": 5,
+                    "Weight": 0,
+                },
+                [
+                    ui.Label(
+                        {
+                            "Text": "Output path",
+                            "Weight": 0,
+                        }
+                    ),
+                    ui.LineEdit(
+                        {
+                            "ID": outputPathID,
+                            "ClearButtonEnabled": True,
+                            # "MaxLength": 10,
+                        }
+                    ),
+                    ui.Button(
+                        {
+                            "ID": browseOutputFileManagerID,
                             "Text": "Browse",
                             "Weight": 0,
                         }
@@ -125,8 +159,24 @@ win = dispatcher.AddWindow(
                         {
                             "ID": clearAllContentID,
                             "Text": "Clear All",
+                            "Weight": 0,
                         }
                     ),
+                ],
+            ),
+            ui.HGroup(
+                {
+                    "Spacing": 5,
+                    "Weight": 0,
+                },
+                [
+                    ui.Button(
+                        {
+                            "ID": ProxyRunID,
+                            "Text": "Run",
+                            "Weight": 0,
+                        }
+                    )
                 ],
             ),
             ui.Tree(
@@ -241,8 +291,7 @@ def get_subfolder_by_name(subfolder_name: str) -> bmd_folder.Folder:
     """
     all_subfolder = root_folder.get_sub_folder_list()
     subfolder_dict: Dict[str, bmd_folder.Folder] = {
-        subfolder.get_name(): subfolder
-        for subfolder in all_subfolder
+        subfolder.get_name(): subfolder for subfolder in all_subfolder
     }
     return subfolder_dict.get(subfolder_name, "")
 
@@ -287,9 +336,15 @@ def on_parse_input_path(ev):
     itm[pathTreeID].AddTopLevelItems(top_level_items)
 
 
-def on_click_browse_button(ev):
+def on_click_input_browse_button(ev):
     selected = fusion.RequestDir()
     itm[inputPathID].Text = str(selected)
+    return selected
+
+
+def on_click_output_browse_button(ev):
+    selected = fusion.RequestDir()
+    itm[outputPathID].Text = str(selected)
     return selected
 
 
@@ -303,11 +358,18 @@ def on_clear_all(ev):
     """For the convenience of development, clear all the content in the media
     pool and switch back to Edit page with one click.
     """
+    # media_pool.refresh_folders()
     all_timeline = get_all_timeline()
     media_pool.delete_timelines(all_timeline)
     subfolders_to_be_deleted = root_folder.get_sub_folder_list()
     media_pool.delete_folders(subfolders_to_be_deleted)
     resolve.open_page("edit")
+
+
+def on_run(ev):
+    media_path = itm[inputPathID].Text
+    proxy_path = itm[outputPathID].Text
+    main(media_path, proxy_path)
 
 
 # Assign events handlers
@@ -318,8 +380,10 @@ win.On[addPathID].Clicked = on_add_tree
 win.On[clearPathID].Clicked = on_clear_all_path
 win.On[pathTreeID].ItemClicked = on_click_tree_item
 win.On[pathParseID].Clicked = on_parse_input_path
-win.On[browseFileManagerID].Clicked = on_click_browse_button
+win.On[browseInputFileManagerID].Clicked = on_click_input_browse_button
+win.On[browseOutputFileManagerID].Clicked = on_click_output_browse_button
 win.On[clearAllContentID].Clicked = on_clear_all
+win.On[ProxyRunID].Clicked = on_run
 
 if __name__ == "__main__":
     win.Show()
