@@ -426,11 +426,6 @@ def create_parser() -> argparse.ArgumentParser:
 
 
 def main(input_path: str, output_path: str):
-    # parser = create_parser()
-    #
-    # # Show help message if no arguments are provided.
-    # if len(sys.argv) == 1:
-    #     parser.print_help()
 
     # Ensure that the output path exists.
     media_parent_path = input_path
