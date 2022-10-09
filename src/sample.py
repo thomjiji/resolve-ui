@@ -1,7 +1,6 @@
 import os
 from pprint import pprint
-from select import select
-from typing import List, Dict
+from typing import List, Dict, Optional, Union
 from proxy import main
 from pybmd import Bmd
 from pybmd import toolkits
@@ -16,9 +15,9 @@ media_pool = project.get_media_pool()
 root_folder = media_pool.get_root_folder()
 media_storage = resolve.get_media_stroage()
 
-fusion = bmd.scriptapp("Fusion")
+fusion = bmd.scriptapp("Fusion")  # type: ignore
 ui = fusion.UIManager
-dispatcher = bmd.UIDispatcher(ui)
+dispatcher = bmd.UIDispatcher(ui)  # type: ignore
 
 createBinID = "Create bin"
 inputPathID = "Input path"
@@ -285,7 +284,7 @@ def get_all_timeline() -> List[bmd_timeline.Timeline]:
     return all_timeline
 
 
-def get_subfolder_by_name(subfolder_name: str) -> bmd_folder.Folder:
+def get_subfolder_by_name(subfolder_name: str) -> Union[str, bmd_folder.Folder]:
     """Get subfolder (Folder object) under the root folder in the media
     pool.
     """
