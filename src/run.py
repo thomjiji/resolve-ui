@@ -60,102 +60,80 @@ win = dispatcher.AddWindow(
                     "Spacing": 5,
                     "Weight": 0,
                 },
-                ui.VGroup(
-                    {
-                        "spacing": 5,
-                        "Weight": 0,
-                    },
-                    [
-                        ui.Label(
-                            {
-                                "Text": "Input Path",
-                                "Weight": 0,
-                                "Alignment": {
-                                    "AlignRight": True,
-                                    # "AlignVCenter": True,
+                [
+                    ui.VGroup(
+                        {
+                            "spacing": 5,
+                            "Weight": 0,
+                        },
+                        [
+                            ui.VGap(0.5),
+                            ui.Label(
+                                {
+                                    "Text": "Input Path",
+                                    "Weight": 0,
+                                    "Alignment": {
+                                        "AlignRight": True,
+                                        "AlignVCenter": True,
+                                    },
                                 },
-                            },
-                        ),
-                        ui.Label(
-                            {
-                                "Text": "Output Path",
-                                "Weight": 0,
-                                "Alignment": {
-                                    "AlignRight": True,
+                            ),
+                            ui.VGap(1),
+                            ui.Label(
+                                {
+                                    "Text": "Output Path",
+                                    "Weight": 0,
+                                    "Alignment": {
+                                        "AlignRight": True,
+                                        "AlignVCenter": True,
+                                    },
                                 }
-                            }
-                        ),
-                    ],
-                ),
-            ),
-            ui.Label(
-                {
-                    "Text": "Automator - thomjiji",
-                    "Weight": 0,
-                    "Alignment": {
-                        "AlignHCenter": True,
-                        "AlignVCenter": True,
-                    },
-                },
-            ),
-            ui.HGroup(
-                {
-                    "Spacing": 5,
-                    "Weight": 0,
-                },
-                [
-                    ui.Label(
+                            ),
+                        ],
+                    ),
+                    ui.VGroup(
                         {
-                            "Text": "Input Path",
+                            "Spacing": 5,
+                            "Weight": 2,
+                        },
+                        [
+                            ui.LineEdit(
+                                {
+                                    "ID": inputPathID,
+                                    "ClearButtonEnabled": True,
+                                    # "MaxLength": 10,
+                                }
+                            ),
+                            ui.LineEdit(
+                                {
+                                    "ID": outputPathID,
+                                    "ClearButtonEnabled": True,
+                                    # "MaxLength": 10,
+                                }
+                            ),
+                        ],
+                    ),
+                    ui.VGroup(
+                        {
+                            "Spacing": 5,
                             "Weight": 0,
-                            "Alignment": {
-                                "AlignHCenter": True,
-                                "AlignVCenter": True,
-                            },
-                        }
-                    ),
-                    ui.HGap(5),
-                    ui.LineEdit(
-                        {
-                            "ID": inputPathID,
-                            "ClearButtonEnabled": True,
-                            # "MaxLength": 10,
-                        }
-                    ),
-                    ui.Button(
-                        {
-                            "ID": browseInputFileManagerID,
-                            "Text": "Browse",
-                            "Weight": 0,
-                        }
-                    ),
-                ],
-            ),
-            ui.HGroup(
-                {
-                    "Spacing": 5,
-                    "Weight": 0,
-                },
-                [
-                    ui.Label(
-                        {
-                            "Text": "Output Path",
-                            "Weight": 0,
-                        }
-                    ),
-                    ui.LineEdit(
-                        {
-                            "ID": outputPathID,
-                            "ClearButtonEnabled": True,
-                            # "MaxLength": 10,
-                        }
-                    ),
-                    ui.Button(
-                        {
-                            "ID": browseOutputFileManagerID,
-                            "Text": "Browse",
-                            "Weight": 0,
-                        }
+                        },
+                        [
+                            ui.Button(
+                                {
+                                    "ID": browseInputFileManagerID,
+                                    "Text": "Browse",
+                                    "Weight": 0,
+                                }
+                            ),
+                            ui.Button(
+                                {
+                                    "ID": browseOutputFileManagerID,
+                                    "Text": "Browse",
+                                    "Weight": 0,
+                                }
+                            ),
+                        ],
                     ),
                 ],
             ),
