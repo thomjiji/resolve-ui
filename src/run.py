@@ -1,6 +1,6 @@
 import os
 from pprint import pprint
-from typing import List, Dict, Optional, Union
+from typing import List, Dict, Union
 from resolve_toolkits import main
 from pybmd import Bmd
 from pybmd import toolkits
@@ -39,7 +39,14 @@ proxyRunID = "Proxy run"
 win = dispatcher.AddWindow(
     {
         "ID": "myWindow",
-        "Geometry": [500, 300, 800, 600],  # 窗口在屏幕上的位置和大小，这个值可以让它出现在屏幕正中间
+        # The position and size of the window on the screen, this
+        # value allows it to appear right in the middle of the screen.
+        "Geometry": [
+            500,
+            300,
+            800,
+            600,
+        ],
         "WindowTitle": "Automator",
     },
     ui.VGroup(
@@ -48,6 +55,39 @@ win = dispatcher.AddWindow(
             "Weight": 0,
         },
         [
+            ui.HGroup(
+                {
+                    "Spacing": 5,
+                    "Weight": 0,
+                },
+                ui.VGroup(
+                    {
+                        "spacing": 5,
+                        "Weight": 0,
+                    },
+                    [
+                        ui.Label(
+                            {
+                                "Text": "Input Path",
+                                "Weight": 0,
+                                "Alignment": {
+                                    "AlignRight": True,
+                                    # "AlignVCenter": True,
+                                },
+                            },
+                        ),
+                        ui.Label(
+                            {
+                                "Text": "Output Path",
+                                "Weight": 0,
+                                "Alignment": {
+                                    "AlignRight": True,
+                                }
+                            }
+                        ),
+                    ],
+                ),
+            ),
             ui.Label(
                 {
                     "Text": "Automator - thomjiji",
