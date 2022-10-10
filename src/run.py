@@ -1,7 +1,7 @@
 import os
 from pprint import pprint
 from typing import List, Dict, Optional, Union
-from proxy import main
+from resolve_toolkits import main
 from pybmd import Bmd
 from pybmd import toolkits
 from pybmd import timeline as bmd_timeline
@@ -32,13 +32,15 @@ pathParseID = "Parse input path"
 browseInputFileManagerID = "Browse input"
 browseOutputFileManagerID = "Browse output"
 clearAllContentID = "Clear all content in the media pool"
-ProxyRunID = "Proxy run"
+proxyRunID = "Proxy run"
+
 
 # Define the window UI layout
 win = dispatcher.AddWindow(
     {
         "ID": "myWindow",
-        "WindowTitle": "sample",
+        "Geometry": [500, 300, 800, 600],  # 窗口在屏幕上的位置和大小，这个值可以让它出现在屏幕正中间
+        "WindowTitle": "Automator",
     },
     ui.VGroup(
         {
@@ -48,7 +50,7 @@ win = dispatcher.AddWindow(
         [
             ui.Label(
                 {
-                    "Text": "Test Window - thomjiji",
+                    "Text": "Automator - thomjiji",
                     "Weight": 0,
                     "Alignment": {
                         "AlignHCenter": True,
@@ -64,11 +66,15 @@ win = dispatcher.AddWindow(
                 [
                     ui.Label(
                         {
-                            "Text": "Input path",
+                            "Text": "Input Path",
                             "Weight": 0,
+                            "Alignment": {
+                                "AlignHCenter": True,
+                                "AlignVCenter": True,
+                            },
                         }
                     ),
-                    ui.HGap(2),
+                    ui.HGap(5),
                     ui.LineEdit(
                         {
                             "ID": inputPathID,
@@ -93,7 +99,7 @@ win = dispatcher.AddWindow(
                 [
                     ui.Label(
                         {
-                            "Text": "Output path",
+                            "Text": "Output Path",
                             "Weight": 0,
                         }
                     ),
@@ -171,7 +177,7 @@ win = dispatcher.AddWindow(
                 [
                     ui.Button(
                         {
-                            "ID": ProxyRunID,
+                            "ID": proxyRunID,
                             "Text": "Run",
                             "Weight": 0,
                         }
@@ -200,8 +206,8 @@ win = dispatcher.AddWindow(
                             "Minimum": 0,
                             "Maximum": 99,
                             "SingleStep": 1,
-                            "Prefix": "The ",
-                            "Suffix": " Items",
+                            # "Prefix": "The ",
+                            # "Suffix": " Items",
                             "Weight": 0.5,
                         }
                     ),
@@ -233,8 +239,8 @@ win = dispatcher.AddWindow(
         ],
     ),
 )
-itm = win.GetItems()
 
+itm = win.GetItems()
 itm[comboBoxID].AddItems(["From Premiere", "From Baselight"])
 itm[pathTreeID].SetHeaderLabel("Camera Name")
 
@@ -297,6 +303,9 @@ def get_subfolder_by_name(subfolder_name: str) -> Union[str, bmd_folder.Folder]:
 
 # Events handlers
 def on_close(ev):
+    """
+    Close the window.
+    """
     dispatcher.ExitLoop()
 
 
@@ -354,10 +363,10 @@ def on_click_tree_item(ev):
 
 
 def on_clear_all(ev):
-    """For the convenience of development, clear all the content in the media
-    pool and switch back to Edit page with one click.
     """
-    # media_pool.refresh_folders()
+    For the convenience of development, clear all the content in the media
+    pool and switch back to Edit page.
+    """
     all_timeline = get_all_timeline()
     media_pool.delete_timelines(all_timeline)
     subfolders_to_be_deleted = root_folder.get_sub_folder_list()
@@ -366,9 +375,28 @@ def on_clear_all(ev):
 
 
 def on_run(ev):
+    itm[proxyRunID].Enabled = False
     media_path = itm[inputPathID].Text
     proxy_path = itm[outputPathID].Text
     main(media_path, proxy_path)
+    itm[proxyRunID].Enabled = True
+
+
+def build_header(treeitem):
+    header = treeitem.NewItem()
+    treeitem.SetHeaderItem(header)
+    for i in range(0, len(tree_header)):
+        info = tree_header[i]
+        header.Text[i] = info["name"]
+        treeitem.ColumnWidth[i] = info["width"]
+
+
+tree_header = {
+    0: {"name": "Header Position 0", "width": 300},
+    1: {"name": "Header Position 1", "width": 250},
+}
+
+build_header(itm[pathTreeID])
 
 
 # Assign events handlers
@@ -382,7 +410,7 @@ win.On[pathParseID].Clicked = on_parse_input_path
 win.On[browseInputFileManagerID].Clicked = on_click_input_browse_button
 win.On[browseOutputFileManagerID].Clicked = on_click_output_browse_button
 win.On[clearAllContentID].Clicked = on_clear_all
-win.On[ProxyRunID].Clicked = on_run
+win.On[proxyRunID].Clicked = on_run
 
 if __name__ == "__main__":
     win.Show()

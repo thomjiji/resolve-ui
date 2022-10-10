@@ -1,5 +1,5 @@
 from typing import Union
-from resolve_init import GetResolve
+from .resolve_init import GetResolve
 from pybmd import timeline as bmd_timeline
 from pybmd import folder as bmd_folder
 

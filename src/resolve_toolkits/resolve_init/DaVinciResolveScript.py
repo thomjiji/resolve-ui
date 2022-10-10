@@ -4,7 +4,7 @@ import os
 
 script_module = None
 try:
-    import fusionscript as script_module
+    import fusionscript as script_module  # type: ignore
 except ImportError:
     # Look for installer based environment variables:
     import os
@@ -27,7 +27,7 @@ except ImportError:
             path = "/opt/resolve/libs/Fusion/"
 
         try:
-            script_module = imp.load_dynamic("fusionscript", path + "fusionscript" + ext)
+            script_module = imp.load_dynamic("fusionscript", path + "fusionscript" + ext)  # type: ignore
         except ImportError:
             pass
 

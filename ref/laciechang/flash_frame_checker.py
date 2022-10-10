@@ -47,7 +47,9 @@ class SMPTE(object):
         """Converts SMPTE timecode to frame count."""
 
         if int(tc[9:]) > self.fps:
-            raise ValueError("SMPTE timecode to frame rate mismatch.", tc, self.fps)
+            raise ValueError(
+                "SMPTE timecode to frame rate mismatch.", tc, self.fps
+            )
 
         hours = int(tc[:2])
         minutes = int(tc[3:5])
@@ -143,7 +145,7 @@ class SMPTE(object):
 
 class Resolve:
     def __init__(self) -> None:
-        self.resolve = bmd.scriptapp("Resolve_Workflow_Integrations")
+        self.resolve = bmd.scriptapp("Resolve")
         self.projectmanager = self.resolve.GetProjectManager()
         self.mediastorage = self.resolve.GetMediaStorage()
         self.currentproject = self.projectmanager.GetCurrentProject()
@@ -258,7 +260,11 @@ window = [
                     ),
                     ui.HGap(),
                     ui.Label(
-                        {"ID": Status, "StyleSheet": "min-width:80px", "Weight": 0}
+                        {
+                            "ID": Status,
+                            "StyleSheet": "min-width:80px",
+                            "Weight": 0,
+                        }
                     ),
                     ui.Button({"ID": Run, "Text": "检查", "Weight": 0}),
                 ],
@@ -271,7 +277,12 @@ dlg = disp.AddWindow(
     {
         "WindowTitle": "Flash Frame Checker",
         "ID": "MyWin",
-        "Geometry": [600, 300, 400, 300],  # position when starting  # width, height
+        "Geometry": [
+            600,
+            300,  # position when starting
+            400,
+            300,  # width, height
+        ],
     },
     window,
 )
