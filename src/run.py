@@ -33,6 +33,7 @@ browseInputFileManagerID = "Browse input"
 browseOutputFileManagerID = "Browse output"
 clearAllContentID = "Clear all content in the media pool"
 proxyRunID = "Proxy run"
+addSinglePathID = "Add single path"
 
 
 # Define the window UI layout
@@ -182,6 +183,13 @@ win = dispatcher.AddWindow(
                         {
                             "ID": clearAllContentID,
                             "Text": "Clear All",
+                            "Weight": 0,
+                        }
+                    ),
+                    ui.Button(
+                        {
+                            "ID": addSinglePathID,
+                            "Text": "Add Single Path",
                             "Weight": 0,
                         }
                     ),
@@ -336,7 +344,7 @@ def on_test_click(ev):
     print(f"{itm[inputPathID].Text}")
 
 
-def on_add_tree(ev):
+def on_add_all_path_to_tree(ev):
     top_level_items = []
     row = itm[pathTreeID].NewItem()
     row.Text[0] = itm[inputPathID].Text
@@ -400,6 +408,13 @@ def on_run(ev):
     itm[proxyRunID].Enabled = True
 
 
+def on_add_single_path_to_tree(ev):
+    row = itm[pathTreeID].NewItem()
+    row.Text[0] = itm[inputPathID].Text  # Add text to column 0
+    row.Text[1] = itm[inputPathID].Text  # Add text to column 1
+    itm[pathTreeID].AddTopLevelItem(row)
+
+
 def build_header(treeitem):
     header = treeitem.NewItem()
     treeitem.SetHeaderItem(header)
@@ -410,7 +425,7 @@ def build_header(treeitem):
 
 
 tree_header = {
-    0: {"name": "Header Position 0", "width": 300},
+    0: {"name": "Header Position 0", "width": 350},
     1: {"name": "Header Position 1", "width": 250},
 }
 
@@ -421,7 +436,7 @@ build_header(itm[pathTreeID])
 win.On.myWindow.Close = on_close
 win.On[createBinID].Clicked = on_create_bin
 win.On[testID].Clicked = on_test_click
-win.On[addPathID].Clicked = on_add_tree
+win.On[addPathID].Clicked = on_add_all_path_to_tree
 win.On[clearPathID].Clicked = on_clear_all_path
 win.On[pathTreeID].ItemClicked = on_click_tree_item
 win.On[pathParseID].Clicked = on_parse_input_path
@@ -429,6 +444,7 @@ win.On[browseInputFileManagerID].Clicked = on_click_input_browse_button
 win.On[browseOutputFileManagerID].Clicked = on_click_output_browse_button
 win.On[clearAllContentID].Clicked = on_clear_all
 win.On[proxyRunID].Clicked = on_run
+win.On[addSinglePathID].Clicked = on_add_single_path_to_tree
 
 if __name__ == "__main__":
     win.Show()

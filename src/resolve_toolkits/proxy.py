@@ -436,9 +436,7 @@ def main(input_path: str, output_path: str):
     # Ensure that the output path exists.
     media_parent_path = input_path
     if not os.path.exists(output_path):
-        log.debug(
-            f"proxy output path does not exist, program is " f"terminated."
-        )
+        log.debug(f"proxy output path does not exist, program is terminated.")
         sys.exit()
     else:
         proxy_parent_path = output_path

@@ -29,6 +29,7 @@ browseInputFileManagerID = "Browse input"
 browseOutputFileManagerID = "Browse output"
 clear_and_restart = "Clear all content in the media pool"
 proxyRunID = "Proxy run"
+testAddSigleClip = "Test add single clip"
 
 
 # Define the window UI layout
@@ -146,7 +147,6 @@ win = dispatcher.AddWindow(
                             "Weight": 0,
                         }
                     ),
-
                     ui.Button(
                         {
                             "ID": clear_and_restart,
@@ -161,12 +161,19 @@ win = dispatcher.AddWindow(
                             "Weight": 0,
                         }
                     ),
+                    ui.Button(
+                        {
+                            "ID": testAddSigleClip,
+                            "Text": "Test Sigle",
+                            "Weight": 0,
+                        },
+                    ),
                 ],
             ),
             ui.Tree(
                 {
                     "ID": pathTreeID,
-                    "AlternatingRowColors": True,
+                    "AlternatingRowColors": False,
                     "HeaderHidden": False,
                     "SelectionMode": "ExtendedSelection",
                     "Weight": 1,
@@ -288,10 +295,29 @@ def on_run(ev):
     itm[proxyRunID].Enabled = True
 
 
+def on_test_add_single_clip(ev):
+    row = itm[pathTreeID].NewItem()
+    row.Text[1] = itm[inputPathID].Text
+    row.Text[0] = itm[inputPathID].Text
+    itm[pathTreeID].AddTopLevelItem(row)
+
+
 tree_header = {
-    0: {"name": "Header Position 0", "width": 300},
-    1: {"name": "Header Position 1", "width": 250},
+    0: {"name": "Time", "width": 100},
+    1: {"name": "Message", "width": 250},
 }
+
+
+def build_header(treeitem):
+    header = treeitem.NewItem()
+    treeitem.SetHeaderItem(header)
+    for i in range(0, len(tree_header)):
+        info = tree_header[i]
+        header.Text[i] = info["name"]
+        treeitem.ColumnWidth[i] = info["width"]
+
+
+build_header(itm[pathTreeID])
 
 
 # Assign events handlers
@@ -302,6 +328,7 @@ win.On[browseInputFileManagerID].Clicked = on_click_input_browse_button
 win.On[browseOutputFileManagerID].Clicked = on_click_output_browse_button
 win.On[clear_and_restart].Clicked = on_clear_and_restart
 win.On[proxyRunID].Clicked = on_run
+win.On[testAddSigleClip].Clicked = on_test_add_single_clip
 
 if __name__ == "__main__":
     win.Show()

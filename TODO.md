@@ -3,3 +3,4 @@
 
 # Todo
 - 把整个 win 写成单独的几个 element，不然 UI 越来越多的时候变得极其复杂难以维护
+- [BUG] Clear All button 只要当媒体池中有不在 bin 里的文件时，就会跳过它，不清除它
