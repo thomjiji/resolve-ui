@@ -141,22 +141,23 @@ win = dispatcher.AddWindow(
                 [
                     ui.Button(
                         {
-                            "ID": testID,
-                            "Text": "Test",
-                            "Weight": 0,
-                        }
-                    ),
-                    ui.Button(
-                        {
                             "ID": proxyRunID,
                             "Text": "Run",
                             "Weight": 0,
                         }
                     ),
+
                     ui.Button(
                         {
                             "ID": clear_and_restart,
                             "Text": "Clear And Restart",
+                            "Weight": 0,
+                        }
+                    ),
+                    ui.Button(
+                        {
+                            "ID": testID,
+                            "Text": "Test",
                             "Weight": 0,
                         }
                     ),
@@ -173,53 +174,11 @@ win = dispatcher.AddWindow(
                     "SortingEnabled": True,
                 }
             ),
-            ui.HGroup(
-                {
-                    "Weight": 0,
-                },
-                [
-                    ui.SpinBox(
-                        {
-                            "Value": 0,
-                            "Minimum": 0,
-                            "Maximum": 99,
-                            "SingleStep": 1,
-                            # "Prefix": "The ",
-                            # "Suffix": " Items",
-                            "Weight": 0.5,
-                        }
-                    ),
-                    ui.Slider(
-                        {
-                            "Value": 0,
-                            "Minimum": 0,
-                            "Maximum": 100,
-                            "SliderPosition": "Center",
-                        }
-                    ),
-                    ui.ComboBox(
-                        {
-                            "ID": comboBoxID,
-                            "Editable": False,
-                            "Enable": True,
-                            # "CurrentText": "Info down below",
-                        }
-                    ),
-                    ui.CheckBox(
-                        {
-                            "Text": "Check Or Not",
-                            "Checkable": True,
-                            "Checked": False,
-                        }
-                    ),
-                ],
-            ),
         ],
     ),
 )
 
 itm = win.GetItems()
-itm[comboBoxID].AddItems(["From Premiere", "From Baselight"])
 itm[pathTreeID].SetHeaderLabel("Program Message")
 
 
