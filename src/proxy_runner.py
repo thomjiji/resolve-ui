@@ -284,6 +284,7 @@ def on_clear_and_restart(ev):
     media_pool.delete_timelines(all_timeline)
     subfolders_to_be_deleted = root_folder.get_sub_folder_list()
     media_pool.delete_folders(subfolders_to_be_deleted)
+    media_pool.delete_clips(root_folder.get_clip_list())
     resolve.open_page("edit")
 
 

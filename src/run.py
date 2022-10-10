@@ -388,7 +388,7 @@ def on_click_tree_item(ev):
     print(current_item)
 
 
-def on_clear_all(ev):
+def on_clear_and_restart(ev):
     """
     For the convenience of development, clear all the content in the media
     pool and switch back to Edit page.
@@ -397,6 +397,7 @@ def on_clear_all(ev):
     media_pool.delete_timelines(all_timeline)
     subfolders_to_be_deleted = root_folder.get_sub_folder_list()
     media_pool.delete_folders(subfolders_to_be_deleted)
+    media_pool.delete_clips(root_folder.get_clip_list())
     resolve.open_page("edit")
 
 
@@ -442,7 +443,7 @@ win.On[pathTreeID].ItemClicked = on_click_tree_item
 win.On[pathParseID].Clicked = on_parse_input_path
 win.On[browseInputFileManagerID].Clicked = on_click_input_browse_button
 win.On[browseOutputFileManagerID].Clicked = on_click_output_browse_button
-win.On[clearAllContentID].Clicked = on_clear_all
+win.On[clearAllContentID].Clicked = on_clear_and_restart
 win.On[proxyRunID].Clicked = on_run
 win.On[addSinglePathID].Clicked = on_add_single_path_to_tree
 
