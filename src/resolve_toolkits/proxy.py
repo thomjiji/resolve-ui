@@ -15,20 +15,27 @@ log = logging.getLogger(__name__)
 log.setLevel(logging.DEBUG)
 
 # Create console handler and set level to debug
-ch = logging.StreamHandler()
-ch.setLevel(logging.DEBUG)
+console_handler = logging.StreamHandler()
+file_handler = logging.FileHandler(
+    filename="/Users/thom/code/resolve-ui/src/log/proxy_runner.log", mode="w"
+)
+console_handler.setLevel(logging.DEBUG)
+file_handler.setLevel(logging.DEBUG)
 
 # Create formatter
-formatter = logging.Formatter(
+console_formatter = logging.Formatter(
     "%(name)s %(levelname)s %(asctime)s at %(lineno)s: %(message)s",
     datefmt="%H:%M:%S",
 )
+file_formatter = logging.Formatter("%(asctime)s", datefmt="%H:%M:%S")
 
-# Add formatter to ch
-ch.setFormatter(formatter)
+# Add formatter to console handler and file handler
+console_handler.setFormatter(console_formatter)
+file_handler.setFormatter(file_formatter)
 
 # Add ch to logger
-log.addHandler(ch)
+log.addHandler(console_handler)
+log.addHandler(file_handler)
 
 
 def absolute_file_paths(path: str) -> list:
@@ -432,6 +439,8 @@ def create_parser() -> argparse.ArgumentParser:
 
 
 def main(input_path: str, output_path: str):
+
+    print(f"Now it has {log.handlers}")
 
     # Ensure that the output path exists.
     media_parent_path = input_path

@@ -1,9 +1,8 @@
 import os
 from pprint import pprint
-from typing import List, Dict, TypeVar, Union
+from typing import Dict, Union
 from resolve_toolkits import main
 from pybmd import Bmd
-from pybmd import toolkits
 from pybmd import timeline as bmd_timeline
 from pybmd import folder as bmd_folder
 
@@ -33,7 +32,7 @@ browseInputFileManagerID = "Browse input"
 browseOutputFileManagerID = "Browse output"
 clearAndRestart = "Clear all content in the media pool"
 proxyRunID = "Proxy run"
-testAddSigleClip = "Test add single clip"
+testAddSingleClip = "Test add single clip"
 
 
 # Define the window UI layout
@@ -167,8 +166,8 @@ win = dispatcher.AddWindow(
                     ),
                     ui.Button(
                         {
-                            "ID": testAddSigleClip,
-                            "Text": "Test Sigle",
+                            "ID": testAddSingleClip,
+                            "Text": "Test Single",
                             "Weight": 0,
                         },
                     ),
@@ -200,8 +199,9 @@ tree_header = {
 
 
 # General functions
-def absolute_file_paths(path: str) -> List[str]:
-    """Get the abs of all files from the input path, exclude files from
+def absolute_file_paths(path: str) -> list[str]:
+    """
+    Get the abs of all files from the input path, exclude files from
     INVALID_EXTENSION.
     """
     absolute_file_path_list = []
@@ -217,8 +217,9 @@ def absolute_file_paths(path: str) -> List[str]:
     return absolute_file_path_list
 
 
-def get_sorted_path(path: str) -> List[str]:
-    """Get the abs of all files from the input path, then sort the abs,
+def get_sorted_path(path: str) -> list[str]:
+    """
+    Get the abs of all files from the input path, then sort the abs,
     and finally return a list of sorted abs.
     """
     filename_and_fullpath_dict = {
@@ -231,10 +232,13 @@ def get_sorted_path(path: str) -> List[str]:
     return fullpaths
 
 
-def get_all_timeline() -> List[bmd_timeline.Timeline]:
-    """Get all existing timelines. Return a list containing timeline object.
+def get_all_timeline() -> list[bmd_timeline.Timeline]:
+    """
+    Get all existing timelines. Return a list containing timeline object.
 
-    Returns:
+    Returns
+    --------
+    list
         A list containing all the timeline object in the media pool.
 
     """
@@ -245,7 +249,8 @@ def get_all_timeline() -> List[bmd_timeline.Timeline]:
 
 
 def get_subfolder_by_name(subfolder_name: str) -> Union[str, bmd_folder.Folder]:
-    """Get subfolder (Folder object) under the root folder in the media
+    """
+    Get subfolder (Folder object) under the root folder in the media
     pool.
     """
     all_subfolder = root_folder.get_sub_folder_list()
@@ -317,14 +322,23 @@ def on_run(ev):
     media_path = itm[inputPathID].Text
     proxy_path = itm[outputPathID].Text
     main(media_path, proxy_path)
+    read_logs()
     itm[proxyRunID].Enabled = True
 
 
 def on_test_add_single_clip(ev):
     row = itm[pathTreeID].NewItem()
-    row.Text[1] = itm[inputPathID].Text  # Add text to column 0
-    row.Text[0] = itm[inputPathID].Text  # Add text to column 1
-    itm[pathTreeID].AddTopLevelItem(row)
+    for log_line in read_logs():
+        print(log_line, end="")
+        row.Text[0] = log_line
+        # row.Text[0] = itm[inputPathID].Text  # Add text to column 1
+        itm[pathTreeID].AddTopLevelItem(row)
+
+
+def read_logs():
+    with open("/Users/thom/code/resolve-ui/src/log/proxy_runner.log", "r") as f:
+        log_lines = [line.strip() for line in f.readlines()]
+        return log_lines
 
 
 # Assign events handlers
@@ -335,7 +349,7 @@ win.On[browseInputFileManagerID].Clicked = on_click_input_browse_button
 win.On[browseOutputFileManagerID].Clicked = on_click_output_browse_button
 win.On[clearAndRestart].Clicked = on_clear_and_restart
 win.On[proxyRunID].Clicked = on_run
-win.On[testAddSigleClip].Clicked = on_test_add_single_clip
+win.On[testAddSingleClip].Clicked = on_test_add_single_clip
 
 build_header(itm[pathTreeID])
 
