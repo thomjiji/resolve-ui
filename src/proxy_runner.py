@@ -293,6 +293,14 @@ def read_logs() -> list[str]:
         return log_lines
 
 
+def _add_logs(log_lines: list[str]) -> None:
+    for log_line in log_lines:
+        row = itm[pathTreeID].NewItem()
+        row.Text[0] = re.findall(r"\d{2}:\d{2}:\d{2}", log_line)[0]
+        row.Text[1] = log_line.split(":")[3].strip()
+        itm[pathTreeID].AddTopLevelItem(row)
+
+
 # Events handlers
 def on_close(ev):
     """
@@ -341,7 +349,7 @@ def on_run(ev):
     media_path = itm[inputPathID].Text
     proxy_path = itm[outputPathID].Text
     main(media_path, proxy_path)
-    _on_add_logs(read_logs())
+    _add_logs(read_logs())
     itm[proxyRunID].Enabled = True
 
 
@@ -351,14 +359,6 @@ def on_test_add_single_clip(ev):
 
 def on_clear_all_message(ev):
     itm[pathTreeID].Clear()
-
-
-def _on_add_logs(log_lines: list[str]):
-    for log_line in log_lines:
-        row = itm[pathTreeID].NewItem()
-        row.Text[0] = re.findall(r"\d{2}:\d{2}:\d{2}", log_line)[0]
-        row.Text[1] = log_line.split(":")[3].strip()
-        itm[pathTreeID].AddTopLevelItem(row)
 
 
 # Assign events handlers

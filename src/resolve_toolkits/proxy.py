@@ -2,6 +2,7 @@
 
 import argparse
 import os
+import pathlib
 import re
 import sys
 import logging
@@ -446,7 +447,11 @@ def main(input_path: str, output_path: str):
     # Ensure that the output path exists.
     media_parent_path = input_path
     if not os.path.exists(output_path):
-        log.debug(f"proxy output path does not exist, program is terminated.")
+        pathlib.Path(output_path).mkdir(parents=True, exist_ok=True)
+        log.debug(
+            "The output path provided did not exist, but is now automatically "
+            "created for you, please re-open the program."
+        )
         sys.exit()
     else:
         proxy_parent_path = output_path
@@ -482,12 +487,3 @@ def main(input_path: str, output_path: str):
     # Apply H.265 render preset to all timelines and add them to the render
     # queue sequentially.
     p.add_render_job()
-
-    # # Before starting rendering, pause the program, confirm to the user if
-    # # Burn-in has been added, and give the user time to confirm that other
-    # # parameters are correct. Then start rendering.
-    # if input(
-    #     "The program is paused, please add burn-in manually, then enter "
-    #     "'y' to start rendering. Enter 'n' to exit the program. y/n?"
-    # ) == "y":
-    #     p.project.StartRendering(isInteractiveMode=True)
