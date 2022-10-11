@@ -31,9 +31,10 @@ clearSelectedPathID = "Clear selected path"
 comboBoxID = "Combo Box"
 browseInputFileManagerID = "Browse input"
 browseOutputFileManagerID = "Browse output"
-clearAndRestart = "Clear all content in the media pool"
+clearAndRestartID = "Clear all content in the media pool"
 proxyRunID = "Proxy run"
 testAddSingleClip = "Test add single clip"
+clearAllMessageID = "Clear all message"
 
 
 # Define the window UI layout
@@ -146,20 +147,6 @@ win = dispatcher.AddWindow(
                 [
                     ui.Button(
                         {
-                            "ID": proxyRunID,
-                            "Text": "Run",
-                            "Weight": 0,
-                        }
-                    ),
-                    ui.Button(
-                        {
-                            "ID": clearAndRestart,
-                            "Text": "Clear And Restart",
-                            "Weight": 0,
-                        }
-                    ),
-                    ui.Button(
-                        {
                             "ID": testID,
                             "Text": "Test",
                             "Weight": 0,
@@ -167,8 +154,29 @@ win = dispatcher.AddWindow(
                     ),
                     ui.Button(
                         {
+                            "ID": proxyRunID,
+                            "Text": "Run",
+                            "Weight": 0,
+                        }
+                    ),
+                    ui.Button(
+                        {
+                            "ID": clearAndRestartID,
+                            "Text": "Clear And Restart",
+                            "Weight": 0,
+                        }
+                    ),
+                    ui.Button(
+                        {
+                            "ID": clearAllMessageID,
+                            "Text": "Clear All Message",
+                            "Weight": 0,
+                        }
+                    ),
+                    ui.Button(
+                        {
                             "ID": testAddSingleClip,
-                            "Text": "Test Single",
+                            "Text": "Test Single Add",
                             "Weight": 0,
                         },
                     ),
@@ -341,6 +349,10 @@ def on_test_add_single_clip(ev):
     pass
 
 
+def on_clear_all_message(ev):
+    itm[pathTreeID].Clear()
+
+
 def _on_add_logs(log_lines: list[str]):
     for log_line in log_lines:
         row = itm[pathTreeID].NewItem()
@@ -355,9 +367,10 @@ win.On[testID].Clicked = on_test_click
 win.On[pathTreeID].ItemClicked = on_click_tree_item
 win.On[browseInputFileManagerID].Clicked = on_click_input_browse_button
 win.On[browseOutputFileManagerID].Clicked = on_click_output_browse_button
-win.On[clearAndRestart].Clicked = on_clear_and_restart
+win.On[clearAndRestartID].Clicked = on_clear_and_restart
 win.On[proxyRunID].Clicked = on_run
 win.On[testAddSingleClip].Clicked = on_test_add_single_clip
+win.On[clearAllMessageID].Clicked = on_clear_all_message
 
 build_header(itm[pathTreeID])
 
