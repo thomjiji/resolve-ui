@@ -445,21 +445,20 @@ def create_parser() -> argparse.ArgumentParser:
 def main(input_path: str, output_path: str):
 
     # Ensure that the output path exists.
-    media_parent_path = input_path
-    if not os.path.exists(output_path):
-        pathlib.Path(output_path).mkdir(parents=True, exist_ok=True)
-        log.debug(
-            "The output path provided did not exist, but is now automatically "
-            "created for you, please re-open the program."
+    if not pathlib.Path(output_path).exists():
+        pathlib.Path(output_path).mkdir(parents=True)
+        log.info(
+            "The specified output path does not exist, automatically "
+            "created it."
         )
-        sys.exit()
-    else:
-        proxy_parent_path = output_path
+    media_parent_path = input_path
+    proxy_parent_path = output_path
 
     # Initialize the proxy object.
     p = Proxy(media_parent_path, proxy_parent_path)
 
     p.set_project_color_management()
+
     # Create bin in the media pool.
     media_fullpath_list = p.media_storage.GetSubFolderList(media_parent_path)
     p.create_bin(get_subfolders_name(media_fullpath_list))
