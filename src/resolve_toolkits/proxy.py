@@ -27,7 +27,10 @@ console_formatter = logging.Formatter(
     "%(name)s %(levelname)s %(asctime)s at %(lineno)s: %(message)s",
     datefmt="%H:%M:%S",
 )
-file_formatter = logging.Formatter("%(asctime)s", datefmt="%H:%M:%S")
+file_formatter = logging.Formatter(
+    "%(name)s %(levelname)s %(asctime)s at %(lineno)s: %(message)s",
+    datefmt="%H:%M:%S",
+)
 
 # Add formatter to console handler and file handler
 console_handler.setFormatter(console_formatter)
@@ -439,8 +442,6 @@ def create_parser() -> argparse.ArgumentParser:
 
 
 def main(input_path: str, output_path: str):
-
-    print(f"Now it has {log.handlers}")
 
     # Ensure that the output path exists.
     media_parent_path = input_path

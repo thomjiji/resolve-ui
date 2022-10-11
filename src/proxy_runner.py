@@ -1,5 +1,6 @@
 import os
 from pprint import pprint
+import re
 from typing import Dict, Union
 from resolve_toolkits import main
 from pybmd import Bmd
@@ -274,6 +275,16 @@ def build_header(tree_item):
         tree_item.ColumnWidth[i] = info["width"]
 
 
+def read_logs() -> list[str]:
+    """
+    Read line by line from a fixed path log file and store each line in a list,
+    each line is an element of the list.
+    """
+    with open("/Users/thom/code/resolve-ui/src/log/proxy_runner.log", "r") as f:
+        log_lines = [line.strip() for line in f.readlines()]
+        return log_lines
+
+
 # Events handlers
 def on_close(ev):
     """
@@ -322,23 +333,20 @@ def on_run(ev):
     media_path = itm[inputPathID].Text
     proxy_path = itm[outputPathID].Text
     main(media_path, proxy_path)
-    read_logs()
+    _on_add_logs(read_logs())
     itm[proxyRunID].Enabled = True
 
 
 def on_test_add_single_clip(ev):
-    row = itm[pathTreeID].NewItem()
-    for log_line in read_logs():
-        print(log_line, end="")
-        row.Text[0] = log_line
-        # row.Text[0] = itm[inputPathID].Text  # Add text to column 1
+    pass
+
+
+def _on_add_logs(log_lines: list[str]):
+    for log_line in log_lines:
+        row = itm[pathTreeID].NewItem()
+        row.Text[0] = re.findall(r"\d{2}:\d{2}:\d{2}", log_line)[0]
+        row.Text[1] = log_line.split(":")[3].strip()
         itm[pathTreeID].AddTopLevelItem(row)
-
-
-def read_logs():
-    with open("/Users/thom/code/resolve-ui/src/log/proxy_runner.log", "r") as f:
-        log_lines = [line.strip() for line in f.readlines()]
-        return log_lines
 
 
 # Assign events handlers

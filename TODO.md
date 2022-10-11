@@ -1,6 +1,7 @@
 # Todo
 - 把整个 win 写成单独的几个 element，不然 UI 越来越多的时候变得极其复杂难以维护
 - [BUG] unsupported operand type(s) for +: 'NoneType' and 'int', Clear All button 有时会失效，报错这个
+- 如果 output path 不存在，程序会直接崩溃（窗口直接关掉，毫无预兆）
 
 # Done
 - 把 input path and output path 写到一个 VGroup 里，VGroup 在 一个 HGroup 里
