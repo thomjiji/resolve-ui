@@ -1,24 +1,28 @@
 import os
 from pprint import pprint
-from typing import List, Dict, Union
+from typing import List, Dict, TypeVar, Union
 from resolve_toolkits import main
 from pybmd import Bmd
 from pybmd import toolkits
 from pybmd import timeline as bmd_timeline
 from pybmd import folder as bmd_folder
 
+# Constants
 INVALID_EXTENSION = ["DS_Store", "JPG", "JPEG", "SRT"]
 
+# Initialize Resolve base object using pybmd
 resolve = Bmd()
 project = resolve.get_project_manager().get_current_project()
 media_pool = project.get_media_pool()
 root_folder = media_pool.get_root_folder()
 media_storage = resolve.get_media_stroage()
 
+# Initialize the UI
 fusion = bmd.scriptapp("Fusion")  # type: ignore
 ui = fusion.UIManager
 dispatcher = bmd.UIDispatcher(ui)  # type: ignore
 
+# Declare UI elements ID
 inputPathID = "Input path"
 outputPathID = "Output path"
 testID = "Test click"
@@ -27,7 +31,7 @@ clearSelectedPathID = "Clear selected path"
 comboBoxID = "Combo Box"
 browseInputFileManagerID = "Browse input"
 browseOutputFileManagerID = "Browse output"
-clear_and_restart = "Clear all content in the media pool"
+clearAndRestart = "Clear all content in the media pool"
 proxyRunID = "Proxy run"
 testAddSigleClip = "Test add single clip"
 
@@ -149,7 +153,7 @@ win = dispatcher.AddWindow(
                     ),
                     ui.Button(
                         {
-                            "ID": clear_and_restart,
+                            "ID": clearAndRestart,
                             "Text": "Clear And Restart",
                             "Weight": 0,
                         }
@@ -185,8 +189,14 @@ win = dispatcher.AddWindow(
     ),
 )
 
+
+# Get items of the UI
 itm = win.GetItems()
-itm[pathTreeID].SetHeaderLabel("Program Message")
+
+tree_header = {
+    0: {"name": "Time", "width": 100},
+    1: {"name": "Message", "width": 250},
+}
 
 
 # General functions
@@ -245,6 +255,20 @@ def get_subfolder_by_name(subfolder_name: str) -> Union[str, bmd_folder.Folder]:
     return subfolder_dict.get(subfolder_name, "")
 
 
+def build_header(tree_item):
+    """
+    Build the header of the tree.
+
+    tree_item is TreeItem element, this func take TreeItem as input.
+    """
+    header = tree_item.NewItem()
+    tree_item.SetHeaderItem(header)
+    for i in range(0, len(tree_header)):
+        info = tree_header[i]
+        header.Text[i] = info["name"]
+        tree_item.ColumnWidth[i] = info["width"]
+
+
 # Events handlers
 def on_close(ev):
     """
@@ -298,27 +322,9 @@ def on_run(ev):
 
 def on_test_add_single_clip(ev):
     row = itm[pathTreeID].NewItem()
-    row.Text[1] = itm[inputPathID].Text
-    row.Text[0] = itm[inputPathID].Text
+    row.Text[1] = itm[inputPathID].Text  # Add text to column 0
+    row.Text[0] = itm[inputPathID].Text  # Add text to column 1
     itm[pathTreeID].AddTopLevelItem(row)
-
-
-tree_header = {
-    0: {"name": "Time", "width": 100},
-    1: {"name": "Message", "width": 250},
-}
-
-
-def build_header(treeitem):
-    header = treeitem.NewItem()
-    treeitem.SetHeaderItem(header)
-    for i in range(0, len(tree_header)):
-        info = tree_header[i]
-        header.Text[i] = info["name"]
-        treeitem.ColumnWidth[i] = info["width"]
-
-
-build_header(itm[pathTreeID])
 
 
 # Assign events handlers
@@ -327,9 +333,11 @@ win.On[testID].Clicked = on_test_click
 win.On[pathTreeID].ItemClicked = on_click_tree_item
 win.On[browseInputFileManagerID].Clicked = on_click_input_browse_button
 win.On[browseOutputFileManagerID].Clicked = on_click_output_browse_button
-win.On[clear_and_restart].Clicked = on_clear_and_restart
+win.On[clearAndRestart].Clicked = on_clear_and_restart
 win.On[proxyRunID].Clicked = on_run
 win.On[testAddSigleClip].Clicked = on_test_add_single_clip
+
+build_header(itm[pathTreeID])
 
 if __name__ == "__main__":
     win.Show()

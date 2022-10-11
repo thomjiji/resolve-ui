@@ -7,18 +7,22 @@ from pybmd import toolkits
 from pybmd import timeline as bmd_timeline
 from pybmd import folder as bmd_folder
 
+# Constants
 INVALID_EXTENSION = ["DS_Store", "JPG", "JPEG", "SRT"]
 
+# Initialize Resolve base object using pybmd
 resolve = Bmd()
 project = resolve.get_project_manager().get_current_project()
 media_pool = project.get_media_pool()
 root_folder = media_pool.get_root_folder()
 media_storage = resolve.get_media_stroage()
 
+# Initialize the UI
 fusion = bmd.scriptapp("Fusion")  # type: ignore
 ui = fusion.UIManager
 dispatcher = bmd.UIDispatcher(ui)  # type: ignore
 
+# Declare UI elements ID
 createBinID = "Create bin"
 inputPathID = "Input path"
 outputPathID = "Output path"
@@ -270,6 +274,10 @@ itm = win.GetItems()
 itm[comboBoxID].AddItems(["From Premiere", "From Baselight"])
 itm[pathTreeID].SetHeaderLabel("Camera Name")
 
+tree_header = {
+    0: {"name": "Header Position 0", "width": 350},
+    1: {"name": "Header Position 1", "width": 250},
+}
 
 # General functions
 def absolute_file_paths(path: str) -> List[str]:
@@ -325,6 +333,20 @@ def get_subfolder_by_name(subfolder_name: str) -> Union[str, bmd_folder.Folder]:
         subfolder.get_name(): subfolder for subfolder in all_subfolder
     }
     return subfolder_dict.get(subfolder_name, "")
+
+
+def build_header(tree_item):
+    """
+    Build the header of the tree.
+
+    tree_item is TreeItem element, this func take TreeItem as input.
+    """
+    header = tree_item.NewItem()
+    tree_item.SetHeaderItem(header)
+    for i in range(0, len(tree_header)):
+        info = tree_header[i]
+        header.Text[i] = info["name"]
+        tree_item.ColumnWidth[i] = info["width"]
 
 
 # Events handlers
@@ -416,23 +438,6 @@ def on_add_single_path_to_tree(ev):
     itm[pathTreeID].AddTopLevelItem(row)
 
 
-def build_header(treeitem):
-    header = treeitem.NewItem()
-    treeitem.SetHeaderItem(header)
-    for i in range(0, len(tree_header)):
-        info = tree_header[i]
-        header.Text[i] = info["name"]
-        treeitem.ColumnWidth[i] = info["width"]
-
-
-tree_header = {
-    0: {"name": "Header Position 0", "width": 350},
-    1: {"name": "Header Position 1", "width": 250},
-}
-
-build_header(itm[pathTreeID])
-
-
 # Assign events handlers
 win.On.myWindow.Close = on_close
 win.On[createBinID].Clicked = on_create_bin
@@ -446,6 +451,8 @@ win.On[browseOutputFileManagerID].Clicked = on_click_output_browse_button
 win.On[clearAllContentID].Clicked = on_clear_and_restart
 win.On[proxyRunID].Clicked = on_run
 win.On[addSinglePathID].Clicked = on_add_single_path_to_tree
+
+build_header(itm[pathTreeID])
 
 if __name__ == "__main__":
     win.Show()
