@@ -6,6 +6,9 @@ from resolve_toolkits import main
 from pybmd import Bmd
 from pybmd import timeline as bmd_timeline
 from pybmd import folder as bmd_folder
+import time
+from watchdog.observers import Observer
+from watchdog.events import FileSystemEventHandler
 
 # Constants
 INVALID_EXTENSION = ["DS_Store", "JPG", "JPEG", "SRT"]
@@ -301,6 +304,32 @@ def _add_logs(log_lines: list[str]) -> None:
         itm[pathTreeID].AddTopLevelItem(row)
 
 
+class Watcher:
+    def __init__(self, directory=".", handler=FileSystemEventHandler()):
+        self.observer = Observer()
+        self.handler = handler
+        self.directory = directory
+
+    def run(self):
+        self.observer.schedule(self.handler, self.directory, recursive=True)
+        self.observer.start()
+        print(f"Watcher running in {self.directory}")
+        try:
+            while True:
+                pass
+                # time.sleep(1)
+        except:
+            self.observer.stop()
+        self.observer.join()
+        print("\nWatcher Terminated\n")
+
+
+class MyHandler(FileSystemEventHandler):
+    def on_any_event(self, event):
+        if event.event_type == "modified":
+            _add_logs(read_logs())
+
+
 # Events handlers
 def on_close(ev):
     """
@@ -345,6 +374,11 @@ def on_clear_and_restart(ev):
 
 
 def on_run(ev):
+    w = Watcher(
+        directory="/Users/thom/code/resolve-ui/src/log/proxy_runner.log",
+        handler=MyHandler(),
+    )
+    w.run()
     itm[proxyRunID].Enabled = False
     media_path = itm[inputPathID].Text
     proxy_path = itm[outputPathID].Text
