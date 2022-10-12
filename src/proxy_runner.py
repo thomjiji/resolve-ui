@@ -374,14 +374,9 @@ def on_clear_and_restart(ev):
 
 
 def on_run(ev):
-    w = Watcher(
-        directory="/Users/thom/code/resolve-ui/src/log/proxy_runner.log",
-        handler=MyHandler(),
-    )
-    w.run()
     itm[proxyRunID].Enabled = False
-    media_path = itm[inputPathID].Text
-    proxy_path = itm[outputPathID].Text
+    media_path = itm[inputPathID].Text.strip()
+    proxy_path = itm[outputPathID].Text.strip()
     main(media_path, proxy_path)
     _add_logs(read_logs())
     itm[proxyRunID].Enabled = True
