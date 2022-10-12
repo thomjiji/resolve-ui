@@ -464,14 +464,18 @@ def main(input_path: str, output_path: str):
     p.create_bin(get_subfolders_name(media_fullpath_list))
 
     # Import clips to the corresponding bin in media pool.
-    p.import_clip()
+    p.import_clip(one_by_one=True)
 
     # Create new timeline based on the resolution of all the clips in the
     # media pool.
     for res in p.get_resolution():
         if "x" not in res:
             continue
-        if int(res.split("x")[1]) <= 1080:
+        # If any number in the resolution (such as "1920x1080") is less than or
+        # equal to 1080, then the resolution of the newly created timeline will
+        # not be divided by 2. It will still be created at the original
+        # resolution.
+        if int(res.split("x")[1]) <= 1080 or int(res.split("x")[0]) <= 1080:
             timeline_width: int = int(res.split("x")[0])
             timeline_height: int = int(res.split("x")[1])
             p.create_new_timeline(res, timeline_width, timeline_height)
