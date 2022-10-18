@@ -6,7 +6,6 @@ from resolve_toolkits import main
 from pybmd import Bmd
 from pybmd import timeline as bmd_timeline
 from pybmd import folder as bmd_folder
-import time
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 
