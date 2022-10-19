@@ -1,13 +1,11 @@
 import os
 from pprint import pprint
 import re
-from typing import Dict, Union
+from typing import Union
 from resolve_toolkits import main
 from pybmd import Bmd
 from pybmd import timeline as bmd_timeline
 from pybmd import folder as bmd_folder
-from watchdog.observers import Observer
-from watchdog.events import FileSystemEventHandler
 
 # Constants
 INVALID_EXTENSION = ["DS_Store", "JPG", "JPEG", "SRT"]
@@ -265,7 +263,7 @@ def get_subfolder_by_name(subfolder_name: str) -> Union[str, bmd_folder.Folder]:
     pool.
     """
     all_subfolder = root_folder.get_sub_folder_list()
-    subfolder_dict: Dict[str, bmd_folder.Folder] = {
+    subfolder_dict: dict[str, bmd_folder.Folder] = {
         subfolder.get_name(): subfolder for subfolder in all_subfolder
     }
     return subfolder_dict.get(subfolder_name, "")
@@ -301,32 +299,6 @@ def _add_logs(log_lines: list[str]) -> None:
         row.Text[0] = re.findall(r"\d{2}:\d{2}:\d{2}", log_line)[0]
         row.Text[1] = log_line.split(":")[3].strip()
         itm[pathTreeID].AddTopLevelItem(row)
-
-
-class Watcher:
-    def __init__(self, directory=".", handler=FileSystemEventHandler()):
-        self.observer = Observer()
-        self.handler = handler
-        self.directory = directory
-
-    def run(self):
-        self.observer.schedule(self.handler, self.directory, recursive=True)
-        self.observer.start()
-        print(f"Watcher running in {self.directory}")
-        try:
-            while True:
-                pass
-                # time.sleep(1)
-        except:
-            self.observer.stop()
-        self.observer.join()
-        print("\nWatcher Terminated\n")
-
-
-class MyHandler(FileSystemEventHandler):
-    def on_any_event(self, event):
-        if event.event_type == "modified":
-            _add_logs(read_logs())
 
 
 # Events handlers
