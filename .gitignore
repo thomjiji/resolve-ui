@@ -168,3 +168,5 @@ src/_gsdata_/
 .DS_Store
 .vscode/
 ref/
+tmp.ipynb
+.ipynb_checkpoints/
