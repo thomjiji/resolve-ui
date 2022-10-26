@@ -165,6 +165,7 @@ cython_debug/
 
 # End of https://www.toptal.com/developers/gitignore/api/python
 src/_gsdata_/
+**/_gsdata_/
 .DS_Store
 .vscode/
 ref/

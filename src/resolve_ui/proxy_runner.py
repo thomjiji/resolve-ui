@@ -288,7 +288,7 @@ def read_logs() -> list[str]:
     Read line by line from a fixed path log file and store each line in a list,
     each line is an element of the list.
     """
-    with open("/Users/thom/code/resolve-ui/src/log/proxy_runner.log", "r") as f:
+    with open("/Users/thom/code/resolve-ui/src/resolve_ui/log/proxy_runner.log", "r") as f:
         log_lines = [line.strip() for line in f.readlines()]
         return log_lines
 

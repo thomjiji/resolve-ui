@@ -6,6 +6,7 @@ import pathlib
 import re
 import sys
 import logging
+from time import perf_counter
 from typing import Iterable, AnyStr
 from .resolve import Resolve
 
@@ -18,7 +19,7 @@ log.setLevel(logging.DEBUG)
 # Create console handler and set level to debug
 console_handler = logging.StreamHandler()
 file_handler = logging.FileHandler(
-    filename="/Users/thom/code/resolve-ui/src/log/proxy_runner.log", mode="w"
+    filename="/Users/thom/code/resolve-ui/src/resolve_ui/log/proxy_runner.log", mode="w"
 )
 console_handler.setLevel(logging.DEBUG)
 file_handler.setLevel(logging.DEBUG)
@@ -464,7 +465,9 @@ def main(input_path: str, output_path: str):
     p.create_bin(get_subfolders_name(media_fullpath_list))
 
     # Import clips to the corresponding bin in media pool.
-    p.import_clip(one_by_one=True)
+    time_before = perf_counter()
+    p.import_clip()
+    log.info(f"Total time is {perf_counter() - time_before} seconds.")
 
     # Create new timeline based on the resolution of all the clips in the
     # media pool.
