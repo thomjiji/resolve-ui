@@ -1,11 +1,11 @@
-resolve_toolkits.proxy INFO 11:17:24 at 408: Set Project Color Management to 'DaVinci YRGB'
-resolve_toolkits.proxy INFO 11:17:24 at 409: Timeline Color Space is 'Rec.709 Gamma 2.4'
-resolve_toolkits.proxy INFO 11:17:24 at 410: Output Color Space is 'Same as Timeline'
-resolve_toolkits.proxy INFO 11:17:24 at 411: ----------------
-resolve_toolkits.proxy INFO 11:17:24 at 416: Set Timeline Color Space to 'Rec.709 Gamma 2.4'
-resolve_toolkits.proxy INFO 11:17:24 at 417: Timeline Color Space is 'Rec.709 Gamma 2.4'
-resolve_toolkits.proxy INFO 11:17:24 at 418: Output Color Space is 'Same as Timeline'
-resolve_toolkits.proxy INFO 11:17:24 at 419: ----------------
-resolve_toolkits.proxy INFO 11:17:24 at 422: Set Output Color Space to 'Same as Timeline'
-resolve_toolkits.proxy INFO 11:17:25 at 470: Total time is 1.1242901669975254 seconds.
-resolve_toolkits.proxy INFO 11:17:29 at 356: Successfully loaded H.265 render preset
+resolve_toolkits.proxy INFO 21:30:25 at 408: Set Project Color Management to 'DaVinci YRGB'
+resolve_toolkits.proxy INFO 21:30:25 at 409: Timeline Color Space is 'Rec.709 Gamma 2.4'
+resolve_toolkits.proxy INFO 21:30:25 at 410: Output Color Space is 'Rec.709'
+resolve_toolkits.proxy INFO 21:30:25 at 411: ----------------
+resolve_toolkits.proxy INFO 21:30:25 at 416: Set Timeline Color Space to 'Rec.709 Gamma 2.4'
+resolve_toolkits.proxy INFO 21:30:25 at 417: Timeline Color Space is 'Rec.709 Gamma 2.4'
+resolve_toolkits.proxy INFO 21:30:25 at 418: Output Color Space is 'Rec.709'
+resolve_toolkits.proxy INFO 21:30:25 at 419: ----------------
+resolve_toolkits.proxy DEBUG 21:30:25 at 424: Failed to set Output Color Space to 'Same as Timeline'
+resolve_toolkits.proxy INFO 21:30:26 at 470: Total time is 0.9706209159994614 seconds.
+resolve_toolkits.proxy INFO 21:30:28 at 356: Successfully loaded H.265 render preset
