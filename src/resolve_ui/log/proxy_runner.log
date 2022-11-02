@@ -1,0 +1,19 @@
+resolve_toolkits.proxy INFO 22:59:56 at 432: Set Project Color Management to 'DaVinci YRGB'
+resolve_toolkits.proxy INFO 22:59:56 at 433: Timeline Color Space is 'Rec.709 Gamma 2.4'
+resolve_toolkits.proxy INFO 22:59:56 at 434: Output Color Space is 'Rec.709 Gamma 2.4'
+resolve_toolkits.proxy INFO 22:59:56 at 435: ----------------
+resolve_toolkits.proxy INFO 22:59:56 at 440: Set Timeline Color Space to 'Rec.709 Gamma 2.4'
+resolve_toolkits.proxy INFO 22:59:56 at 441: Timeline Color Space is 'Rec.709 Gamma 2.4'
+resolve_toolkits.proxy INFO 22:59:56 at 442: Output Color Space is 'Rec.709 Gamma 2.4'
+resolve_toolkits.proxy INFO 22:59:56 at 443: ----------------
+resolve_toolkits.proxy DEBUG 22:59:56 at 448: Failed to set Output Color Space to 'Same as Timeline'
+resolve_toolkits.proxy DEBUG 22:59:57 at 208: ALEXA_Mini_LF#5
+resolve_toolkits.proxy DEBUG 22:59:57 at 214: Folder (0x0x600017ca6bd0) [App: 'Resolve' on 127.0.0.1, UUID: 46dd584a-707c-419e-a253-37a810d938bd]
+resolve_toolkits.proxy DEBUG 22:59:57 at 208: FX6#3
+resolve_toolkits.proxy DEBUG 22:59:57 at 214: None
+resolve_toolkits.proxy DEBUG 22:59:57 at 208: Ronin_4D#1
+resolve_toolkits.proxy DEBUG 22:59:57 at 214: None
+resolve_toolkits.proxy DEBUG 22:59:57 at 208: Ronin_4D#2
+resolve_toolkits.proxy DEBUG 22:59:57 at 214: None
+resolve_toolkits.proxy DEBUG 22:59:57 at 214: None
+resolve_toolkits.proxy DEBUG 22:59:57 at 214: None

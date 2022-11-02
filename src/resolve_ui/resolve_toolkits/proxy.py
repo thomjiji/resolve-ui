@@ -17,7 +17,8 @@ log.setLevel(logging.DEBUG)
 # Create console handler and set level to debug
 console_handler = logging.StreamHandler()
 file_handler = logging.FileHandler(
-    filename="/Users/thom/code/resolve-ui/src/resolve_ui/log/proxy_runner.log", mode="w"
+    filename="/Users/thom/code/resolve-ui/src/resolve_ui/log/proxy_runner.log",
+    mode="w",
 )
 console_handler.setLevel(logging.DEBUG)
 file_handler.setLevel(logging.DEBUG)
@@ -146,15 +147,19 @@ class Proxy(Resolve):
 
     def create_bin(self, subfolders_list: list[str]) -> None:
         """
-        Create sub-folder under the selected folder. Check duplication by the 
+        Create sub-folder under the selected folder. Check duplication by the
         way: if there is already a folder with the same name under the selected
         bin, it will skip.
+
+        After creating the sub-folders, it will move focus back to the upper
+        level bin. For example: After creating some bins under the root folder, 
+        it would `SetCurrentFolder()` back to the root folder.
 
         Parameters
         ----------
         subfolders_list:
             A list containing all the sub-folder name.
-        
+
         """
         current_selected_bin = self.media_pool.GetCurrentFolder()
 
@@ -164,6 +169,8 @@ class Proxy(Resolve):
 
         if not self.get_subfolder_by_name_recursively("_Timeline"):
             self.media_pool.AddSubFolder(current_selected_bin, "_Timeline")
+
+        self.media_pool.SetCurrentFolder(current_selected_bin)
 
     def import_clip(self, one_by_one=False) -> None:
         """
@@ -194,11 +201,17 @@ class Proxy(Resolve):
                     name = cam_path.split("\\")[
                         cam_path.split("\\").index(media_parent_dir) + 1
                     ]
-                    current_folder = self.get_subfolder_by_name(name)
+                    current_folder = self.get_subfolder_by_name_recursively(
+                        name
+                    )
                 else:
-                    current_folder = self.get_subfolder_by_name(
+                    log.debug(
                         f"{cam_path.split('/')[cam_path.split('/').index(media_parent_dir) + 1]}"
                     )
+                    current_folder = self.get_subfolder_by_name_recursively(
+                        f"{cam_path.split('/')[cam_path.split('/').index(media_parent_dir) + 1]}"
+                    )
+                    log.debug(current_folder)
 
                 self.media_pool.SetCurrentFolder(current_folder)
                 self.media_storage.AddItemListToMediaPool(
@@ -212,14 +225,18 @@ class Proxy(Resolve):
                     name = abs_media_path.split("\\")[
                         abs_media_path.split("\\").index(media_parent_dir) + 1
                     ]
-                    current_folder = self.get_subfolder_by_name(name)
+                    current_folder = self.get_subfolder_by_name_recursively(
+                        name
+                    )
                     self.media_pool.SetCurrentFolder(current_folder)
                     self.media_pool.ImportMedia(abs_media_path)
                 else:
                     name = abs_media_path.split("/")[
                         abs_media_path.split("/").index(media_parent_dir) + 1
                     ]
-                    current_folder = self.get_subfolder_by_name(name)
+                    current_folder = self.get_subfolder_by_name_recursively(
+                        name
+                    )
                     self.media_pool.SetCurrentFolder(current_folder)
                     self.media_pool.ImportMedia(abs_media_path)
 
@@ -474,27 +491,27 @@ def main(input_path: str, output_path: str):
     # Import clips to the corresponding bin in media pool.
     p.import_clip()
 
-    # Create new timeline based on the resolution of all the clips in the
-    # media pool.
-    for res in p.get_resolution():
-        if "x" not in res:
-            continue
-        # If any number in the resolution (such as "1920x1080") is less than or
-        # equal to 1080, then the resolution of the newly created timeline will
-        # not be divided by 2. It will still be created at the original
-        # resolution.
-        if int(res.split("x")[1]) <= 1080 or int(res.split("x")[0]) <= 1080:
-            timeline_width: int = int(res.split("x")[0])
-            timeline_height: int = int(res.split("x")[1])
-            p.create_new_timeline(res, timeline_width, timeline_height)
-        else:
-            timeline_width: int = int(int(res.split("x")[0]) / 2)
-            timeline_height: int = int(int(res.split("x")[1]) / 2)
-            p.create_new_timeline(res, timeline_width, timeline_height)
+    # # Create new timeline based on the resolution of all the clips in the
+    # # media pool.
+    # for res in p.get_resolution():
+    #     if "x" not in res:
+    #         continue
+    #     # If any number in the resolution (such as "1920x1080") is less than or
+    #     # equal to 1080, then the resolution of the newly created timeline will
+    #     # not be divided by 2. It will still be created at the original
+    #     # resolution.
+    #     if int(res.split("x")[1]) <= 1080 or int(res.split("x")[0]) <= 1080:
+    #         timeline_width: int = int(res.split("x")[0])
+    #         timeline_height: int = int(res.split("x")[1])
+    #         p.create_new_timeline(res, timeline_width, timeline_height)
+    #     else:
+    #         timeline_width: int = int(int(res.split("x")[0]) / 2)
+    #         timeline_height: int = int(int(res.split("x")[1]) / 2)
+    #         p.create_new_timeline(res, timeline_width, timeline_height)
 
-    # Import footage to timeline
-    p.append_to_timeline()
+    # # Import footage to timeline
+    # p.append_to_timeline()
 
-    # Apply H.265 render preset to all timelines and add them to the render
-    # queue sequentially.
-    p.add_render_job()
+    # # Apply H.265 render preset to all timelines and add them to the render
+    # # queue sequentially.
+    # p.add_render_job()
