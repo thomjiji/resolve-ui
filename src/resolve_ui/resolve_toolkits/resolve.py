@@ -66,8 +66,8 @@ class Resolve:
         }
         return subfolder_dict.get(subfolder_name, "")
 
-    def get_subfolder_recursively(self, current_selected_folder=None):
-        if current_selected_folder is None:
+    def get_subfolder_recursively(self, recursion_begins_at_root=False):
+        if recursion_begins_at_root:
             current_selected_folder = self.root_folder
         else:
             current_selected_folder = self.media_pool.GetCurrentFolder()
@@ -76,10 +76,15 @@ class Resolve:
 
         for subfolder in current_selected_folder.GetSubFolderList():
             if bool(subfolder.GetSubFolderList()):
-                subfolder_dict.setdefault(subfolder.GetName(), subfolder)
                 self.media_pool.SetCurrentFolder(subfolder)
-                subfolder_dict = subfolder_dict | self.get_subfolder_recursively(subfolder)
+                subfolder_dict.setdefault(subfolder.GetName(), subfolder)
+                subfolder_dict = (
+                    subfolder_dict | self.get_subfolder_recursively(False)
+                )
             else:
                 subfolder_dict.setdefault(subfolder.GetName(), subfolder)
 
         return subfolder_dict
+
+    def get_subfolder_by_name_recursively(self, subfolder_name: str):
+        return self.get_subfolder_recursively(True).get(subfolder_name, "")
