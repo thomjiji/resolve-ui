@@ -88,6 +88,11 @@ class Resolve:
         subfolder_dict = {}
 
         for subfolder in current_selected_folder.GetSubFolderList():
+            # if subfolder has child bins, its `GetSubFolderList()` method will
+            # return a list, otherwise it will return `""` which is False. If it
+            # is True (means subfolder does have child bins), it will go to the
+            # next level of recursion until there is no child bin
+            # (`GetSubFolderList` return `""`).
             if bool(subfolder.GetSubFolderList()):
                 self.media_pool.SetCurrentFolder(subfolder)
                 subfolder_dict.setdefault(subfolder.GetName(), subfolder)
@@ -103,8 +108,8 @@ class Resolve:
         self, subfolder_name: str, recursion_begins_at_root=False
     ):
         """
-        Traverse the media pool recursively, find the subfolder (Folder object) 
-        by given name. If there are subfolders with the same name, it will only 
+        Traverse the media pool recursively, find the subfolder (Folder object)
+        by given name. If there are subfolders with the same name, it will only
         return the first one that appears.
 
         Parameters
@@ -117,7 +122,7 @@ class Resolve:
             recursion will begin at the current selected folder in the media
             pool.
 
-       """
+        """
         return self.get_subfolder_recursively(recursion_begins_at_root).get(
             subfolder_name
         )
