@@ -36,7 +36,8 @@ class Resolve:
         self.current_timeline = self.project.GetCurrentTimeline()
 
     def get_all_timeline(self) -> list[bmd_timeline.Timeline]:
-        """Get all existing timelines. Return a list containing all the timeline
+        """
+        Get all existing timelines. Return a list containing all the timeline
         object.
         """
         all_timeline = []
@@ -57,8 +58,8 @@ class Resolve:
     def get_subfolder_by_name(
         self, subfolder_name: str
     ) -> Union[str, bmd_folder.Folder]:
-        """Get subfolder (Folder object) under the root folder in the media
-        pool.
+        """
+        Get subfolder (Folder object) under the root folder in the media pool.
         """
         all_subfolder = self.root_folder.GetSubFolderList()
         subfolder_dict: dict[str, bmd_folder.Folder] = {
@@ -66,7 +67,19 @@ class Resolve:
         }
         return subfolder_dict.get(subfolder_name, "")
 
-    def get_subfolder_recursively(self, recursion_begins_at_root=False):
+    def get_subfolder_recursively(self, recursion_begins_at_root=False) -> dict:
+        """
+        Traverse the media pool recursively, return a dictionary containing all
+        the subfolders (Folder object) and their names.
+
+        Parameters
+        ----------
+        recursion_begins_at_root:
+            If True, the recursion will begin at the root folder. If False, the
+            recursion will begin at the current selected folder in the media
+            pool.
+
+        """
         if recursion_begins_at_root:
             current_selected_folder = self.root_folder
         else:
@@ -79,12 +92,32 @@ class Resolve:
                 self.media_pool.SetCurrentFolder(subfolder)
                 subfolder_dict.setdefault(subfolder.GetName(), subfolder)
                 subfolder_dict = (
-                    subfolder_dict | self.get_subfolder_recursively(False)
+                    subfolder_dict | self.get_subfolder_recursively()
                 )
             else:
                 subfolder_dict.setdefault(subfolder.GetName(), subfolder)
 
         return subfolder_dict
 
-    def get_subfolder_by_name_recursively(self, subfolder_name: str):
-        return self.get_subfolder_recursively(True).get(subfolder_name, "")
+    def get_subfolder_by_name_recursively(
+        self, subfolder_name: str, recursion_begins_at_root=False
+    ):
+        """
+        Traverse the media pool recursively, find the subfolder (Folder object) 
+        by given name. If there are subfolders with the same name, it will only 
+        return the first one that appears.
+
+        Parameters
+        ----------
+        subfolder_name:
+            The name of the subfolder you want to find and get the corresponding
+            Folder object of it.
+        recursion_begins_at_root:
+            If True, the recursion will begin at the root folder. If False, the
+            recursion will begin at the current selected folder in the media
+            pool.
+
+       """
+        return self.get_subfolder_recursively(recursion_begins_at_root).get(
+            subfolder_name
+        )

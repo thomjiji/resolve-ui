@@ -146,17 +146,24 @@ class Proxy(Resolve):
         #     self.media_parent_path
         # )
 
-    def create_bin(self, subfolders_list: Iterable[AnyStr]) -> None:
-        """Create sub-folder in the media pool root folder."""
+    def create_bin(self, subfolders_list: list[str]) -> None:
+        """
+        Create sub-folder under the selected folder.
+
+        Parameters
+        ----------
+        subfolders_list:
+            A list containing all the sub-folder name.
+        
+        """
         current_selected_bin = self.media_pool.GetCurrentFolder()
 
-        for i in subfolders_list:
-            self.media_pool.AddSubFolder(current_selected_bin, i)
+        for subfolder in subfolders_list:
+            if not self.get_subfolder_by_name_recursively(subfolder):
+                self.media_pool.AddSubFolder(current_selected_bin, subfolder)
 
-        self.media_pool.AddSubFolder(current_selected_bin, "_Timeline")
-
-        # if not self.get_subfolder_by_name("_Timeline"):
-        #     return self.media_pool.AddSubFolder(current_selected_bin, "_Timeline")
+        if not self.get_subfolder_by_name_recursively("_Timeline"):
+            self.media_pool.AddSubFolder(current_selected_bin, "_Timeline")
 
     def import_clip(self, one_by_one=False) -> None:
         """
