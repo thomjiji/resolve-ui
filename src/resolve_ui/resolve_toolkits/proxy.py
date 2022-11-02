@@ -6,8 +6,6 @@ import pathlib
 import re
 import sys
 import logging
-from time import perf_counter
-from typing import Iterable, AnyStr
 from .resolve import Resolve
 
 INVALID_EXTENSION = ["DS_Store", "JPG", "JPEG", "SRT"]
@@ -148,7 +146,9 @@ class Proxy(Resolve):
 
     def create_bin(self, subfolders_list: list[str]) -> None:
         """
-        Create sub-folder under the selected folder.
+        Create sub-folder under the selected folder. Check duplication by the 
+        way: if there is already a folder with the same name under the selected
+        bin, it will skip.
 
         Parameters
         ----------
@@ -179,10 +179,6 @@ class Proxy(Resolve):
         one_by_one
             If this parameter is specified a True, it will be imported one by
             one, which is relatively slow.
-
-
-        Returns
-        -------
 
         """
         media_parent_dir = os.path.basename(self.media_parent_path)
@@ -476,9 +472,7 @@ def main(input_path: str, output_path: str):
     p.create_bin(get_subfolders_name(media_fullpath_list))
 
     # Import clips to the corresponding bin in media pool.
-    time_before = perf_counter()
     p.import_clip()
-    log.info(f"Total time is {perf_counter() - time_before} seconds.")
 
     # Create new timeline based on the resolution of all the clips in the
     # media pool.
