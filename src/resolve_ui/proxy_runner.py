@@ -1,7 +1,6 @@
 import os
 from pprint import pprint
 import re
-from typing import Union
 from resolve_toolkits import main
 from pybmd import Bmd
 from pybmd import timeline as bmd_timeline
@@ -257,7 +256,7 @@ def get_all_timeline() -> list[bmd_timeline.Timeline]:
     return all_timeline
 
 
-def get_subfolder_by_name(subfolder_name: str) -> Union[str, bmd_folder.Folder]:
+def get_subfolder_by_name(subfolder_name: str) -> str | bmd_folder.Folder:
     """
     Get subfolder (Folder object) under the root folder in the media
     pool.

@@ -1,7 +1,6 @@
-from typing import Union
 from .resolve_init import GetResolve
 from pybmd import timeline as bmd_timeline
-from pybmd import folder as bmd_folder
+from .type import Folder
 
 
 class Resolve:
@@ -47,7 +46,7 @@ class Resolve:
 
     def get_timeline_by_name(
         self, timeline_name: str
-    ) -> Union[str, bmd_timeline.Timeline]:
+    ) -> str | bmd_timeline.Timeline:
         """Get timeline object by name."""
         all_timeline: list[bmd_timeline.Timeline] = self.get_all_timeline()
         timeline_dict = {
@@ -57,17 +56,19 @@ class Resolve:
 
     def get_subfolder_by_name(
         self, subfolder_name: str
-    ) -> Union[str, bmd_folder.Folder]:
+    ) -> Folder | str:
         """
         Get subfolder (Folder object) under the root folder in the media pool.
         """
         all_subfolder = self.root_folder.GetSubFolderList()
-        subfolder_dict: dict[str, bmd_folder.Folder] = {
+        subfolder_dict = {
             subfolder.GetName(): subfolder for subfolder in all_subfolder
         }
         return subfolder_dict.get(subfolder_name, "")
 
-    def get_subfolder_recursively(self, recursion_begins_at_root=False) -> dict:
+    def get_subfolder_recursively(
+        self, recursion_begins_at_root=False
+    ) -> dict[str, Folder]:
         """
         Traverse the media pool recursively, return a dictionary containing all
         the subfolders (Folder object) and their names.
@@ -111,7 +112,7 @@ class Resolve:
 
     def get_subfolder_by_name_recursively(
         self, subfolder_name: str, recursion_begins_at_root=False
-    ):
+    ) -> Folder:
         """
         Traverse the media pool recursively, find the subfolder (Folder object)
         by given name. If there are subfolders with the same name, it will only
@@ -128,6 +129,11 @@ class Resolve:
             pool.
 
         """
-        return self.get_subfolder_recursively(recursion_begins_at_root).get(
-            subfolder_name
-        )
+        subfolder = self.get_subfolder_recursively(
+            recursion_begins_at_root
+        ).get(subfolder_name)
+
+        if subfolder:
+            return subfolder
+        else:
+            return self.root_folder
