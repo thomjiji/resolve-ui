@@ -205,13 +205,10 @@ class Proxy(Resolve):
                         name
                     )
                 else:
-                    log.debug(
-                        f"{cam_path.split('/')[cam_path.split('/').index(media_parent_dir) + 1]}"
-                    )
                     current_folder = self.get_subfolder_by_name_recursively(
-                        f"{cam_path.split('/')[cam_path.split('/').index(media_parent_dir) + 1]}"
+                        f"{cam_path.split('/')[cam_path.split('/').index(media_parent_dir) + 1]}",
+                        True
                     )
-                    log.debug(current_folder)
 
                 self.media_pool.SetCurrentFolder(current_folder)
                 self.media_storage.AddItemListToMediaPool(
@@ -489,7 +486,7 @@ def main(input_path: str, output_path: str):
     p.create_bin(get_subfolders_name(media_fullpath_list))
 
     # Import clips to the corresponding bin in media pool.
-    p.import_clip()
+    p.import_clip(one_by_one=True)
 
     # # Create new timeline based on the resolution of all the clips in the
     # # media pool.
