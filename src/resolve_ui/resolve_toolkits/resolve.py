@@ -76,8 +76,13 @@ class Resolve:
         ----------
         recursion_begins_at_root:
             If True, the recursion will begin at the root folder. If False, the
-            recursion will begin at the current selected folder in the media
-            pool.
+            recursion will begin at the current selected folder in media pool.
+
+        Returns
+        -------
+        dict
+            A dictionary containing all the subfolders (Folder object) and their
+            names.
 
         """
         if recursion_begins_at_root:
@@ -89,11 +94,11 @@ class Resolve:
 
         for subfolder in current_selected_folder.GetSubFolderList():
             # if subfolder has child bins, its `GetSubFolderList()` method will
-            # return a list, otherwise it will return `""` which is False. If it
+            # return a list, otherwise it will return `[]` which is False. If it
             # is True (means subfolder does have child bins), it will go to the
             # next level of recursion until there is no child bin
-            # (`GetSubFolderList` return `""`).
-            if bool(subfolder.GetSubFolderList()):
+            # (`GetSubFolderList` return `[]`).
+            if subfolder.GetSubFolderList():
                 self.media_pool.SetCurrentFolder(subfolder)
                 subfolder_dict.setdefault(subfolder.GetName(), subfolder)
                 subfolder_dict = (
