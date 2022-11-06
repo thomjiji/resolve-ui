@@ -43,9 +43,7 @@ class Resolve:
             all_timeline.append(self.project.GetTimelineByIndex(timeline_index))
         return all_timeline
 
-    def get_timeline_by_name(
-        self, timeline_name: str
-    ) -> str | Timeline:
+    def get_timeline_by_name(self, timeline_name: str) -> str | Timeline:
         """Get timeline object by name."""
         all_timeline: list[Timeline] = self.get_all_timeline()
         timeline_dict = {

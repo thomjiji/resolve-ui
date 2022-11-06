@@ -164,10 +164,10 @@ class Proxy(Resolve):
         current_selected_bin = self.media_pool.GetCurrentFolder()
 
         for subfolder in subfolders_list:
-            self.get_subfolder_by_name_recursively(subfolder).GetName()
-            self.media_pool.AddSubFolder(current_selected_bin, subfolder)
+            if not self.get_subfolder_by_name(subfolder):
+                self.media_pool.AddSubFolder(current_selected_bin, subfolder)
 
-        if not self.get_subfolder_by_name_recursively("_Timeline"):
+        if not self.get_subfolder_by_name("_Timeline"):
             self.media_pool.AddSubFolder(current_selected_bin, "_Timeline")
 
         self.media_pool.SetCurrentFolder(current_selected_bin)
@@ -201,13 +201,10 @@ class Proxy(Resolve):
                     name = cam_path.split("\\")[
                         cam_path.split("\\").index(media_parent_dir) + 1
                     ]
-                    current_folder = self.get_subfolder_by_name_recursively(
-                        name
-                    )
+                    current_folder = self.get_subfolder_by_name(name)
                 else:
-                    current_folder = self.get_subfolder_by_name_recursively(
+                    current_folder = self.get_subfolder_by_name(
                         f"{cam_path.split('/')[cam_path.split('/').index(media_parent_dir) + 1]}",
-                        True,
                     )
 
                 self.media_pool.SetCurrentFolder(current_folder)
@@ -222,18 +219,14 @@ class Proxy(Resolve):
                     name = abs_media_path.split("\\")[
                         abs_media_path.split("\\").index(media_parent_dir) + 1
                     ]
-                    current_folder = self.get_subfolder_by_name_recursively(
-                        name
-                    )
+                    current_folder = self.get_subfolder_by_name(name)
                     self.media_pool.SetCurrentFolder(current_folder)
                     self.media_pool.ImportMedia(abs_media_path)
                 else:
                     name = abs_media_path.split("/")[
                         abs_media_path.split("/").index(media_parent_dir) + 1
                     ]
-                    current_folder = self.get_subfolder_by_name_recursively(
-                        name
-                    )
+                    current_folder = self.get_subfolder_by_name(name)
                     self.media_pool.SetCurrentFolder(current_folder)
                     self.media_pool.ImportMedia(abs_media_path)
 

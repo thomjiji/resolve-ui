@@ -1,4 +1,5 @@
 import os
+import pprint
 import re
 from resolve_toolkits import main
 from resolve_toolkits.type import Folder, Timeline
@@ -249,8 +250,8 @@ def get_all_timeline() -> list[Timeline]:
 
     """
     all_timeline = []
-    for timeline_index in range(1, project.get_timeline_count() + 1, 1):
-        all_timeline.append(project.get_timeline_by_index(timeline_index))
+    for timeline_index in range(1, project.GetTimelineCount() + 1, 1):
+        all_timeline.append(project.GetTimelineByIndex(timeline_index))
     return all_timeline
 
 
@@ -284,7 +285,9 @@ def read_logs() -> list[str]:
     Read line by line from a fixed path log file and store each line in a list,
     each line is an element of the list.
     """
-    with open("/Users/thom/code/resolve-ui/src/resolve_ui/log/proxy_runner.log", "r") as f:
+    with open(
+        "/Users/thom/code/resolve-ui/src/resolve_ui/log/proxy_runner.log", "r"
+    ) as f:
         log_lines = [line.strip() for line in f.readlines()]
         return log_lines
 
@@ -333,11 +336,11 @@ def on_clear_and_restart(ev):
     pool and switch back to Edit page.
     """
     all_timeline = get_all_timeline()
-    media_pool.delete_timelines(all_timeline)
-    subfolders_to_be_deleted = root_folder.get_sub_folder_list()
-    media_pool.delete_folders(subfolders_to_be_deleted)
-    media_pool.delete_clips(root_folder.get_clip_list())
-    resolve.open_page("edit")
+    media_pool.DeleteTimelines(all_timeline)
+    subfolders_to_be_deleted = root_folder.GetSubFolderList()
+    media_pool.DeleteFolders(subfolders_to_be_deleted)
+    media_pool.DeleteClips(root_folder.GetClipList())
+    resolve.OpenPage("edit")
 
 
 def on_run(ev):
@@ -350,7 +353,10 @@ def on_run(ev):
 
 
 def on_test_add_single_clip(ev):
-    pass
+    print(project)
+    print(media_storage)
+    print(media_pool)
+    print(root_folder)
 
 
 def on_clear_all_message(ev):
