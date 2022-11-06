@@ -152,7 +152,7 @@ class Proxy(Resolve):
         bin, it will skip.
 
         After creating the sub-folders, it will move focus back to the upper
-        level bin. For example: After creating some bins under the root folder, 
+        level bin. For example: After creating some bins under the root folder,
         it would `SetCurrentFolder()` back to the root folder.
 
         Parameters
@@ -164,8 +164,8 @@ class Proxy(Resolve):
         current_selected_bin = self.media_pool.GetCurrentFolder()
 
         for subfolder in subfolders_list:
-            if not self.get_subfolder_by_name_recursively(subfolder):
-                self.media_pool.AddSubFolder(current_selected_bin, subfolder)
+            self.get_subfolder_by_name_recursively(subfolder).GetName()
+            self.media_pool.AddSubFolder(current_selected_bin, subfolder)
 
         if not self.get_subfolder_by_name_recursively("_Timeline"):
             self.media_pool.AddSubFolder(current_selected_bin, "_Timeline")
@@ -207,7 +207,7 @@ class Proxy(Resolve):
                 else:
                     current_folder = self.get_subfolder_by_name_recursively(
                         f"{cam_path.split('/')[cam_path.split('/').index(media_parent_dir) + 1]}",
-                        True
+                        True,
                     )
 
                 self.media_pool.SetCurrentFolder(current_folder)
@@ -239,7 +239,7 @@ class Proxy(Resolve):
 
     def get_resolution(self) -> list[str]:
         """
-        Get all clip's resolution, return a list consist all all resolution
+        Get all clip's resolution, return a list consist all the resolution
         string.
 
         Returns
@@ -389,11 +389,11 @@ class Proxy(Resolve):
             for timeline in self.get_all_timeline():
                 self.project.SetCurrentTimeline(timeline)
                 try:
-                    os.mkdir(f"{self.proxy_parent_path}/{timeline.GetName()}")  # type: ignore
+                    os.mkdir(f"{self.proxy_parent_path}/{timeline.GetName()}")
                 except FileExistsError:
                     pass
                 rendering_setting = {
-                    "TargetDir": f"{self.proxy_parent_path}/{timeline.GetName()}",  # type: ignore
+                    "TargetDir": f"{self.proxy_parent_path}/{timeline.GetName()}",
                     "ColorSpaceTag": "Same as Project",
                     "GammaTag": "Same as Project",
                 }

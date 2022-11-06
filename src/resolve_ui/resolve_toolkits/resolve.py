@@ -1,16 +1,15 @@
 from .resolve_init import GetResolve
-from pybmd import timeline as bmd_timeline
-from .type import Folder
+from .type import Folder, Timeline
 
 
 class Resolve:
     """
     Resolve class
 
-    This class is used to initialize some necessary objects for the baisc use of
+    This class is used to initialize some necessary objects for the basic use of
     the API.
 
-    Arrtibutes
+    Attributes
     ----------
     resolve
         resolve object, the beginning of all the other object of DaVinci
@@ -34,7 +33,7 @@ class Resolve:
         self.root_folder = self.media_pool.GetRootFolder()
         self.current_timeline = self.project.GetCurrentTimeline()
 
-    def get_all_timeline(self) -> list[bmd_timeline.Timeline]:
+    def get_all_timeline(self) -> list[Timeline]:
         """
         Get all existing timelines. Return a list containing all the timeline
         object.
@@ -46,17 +45,15 @@ class Resolve:
 
     def get_timeline_by_name(
         self, timeline_name: str
-    ) -> str | bmd_timeline.Timeline:
+    ) -> str | Timeline:
         """Get timeline object by name."""
-        all_timeline: list[bmd_timeline.Timeline] = self.get_all_timeline()
+        all_timeline: list[Timeline] = self.get_all_timeline()
         timeline_dict = {
             timeline.GetName(): timeline for timeline in all_timeline  # type: ignore
         }
         return timeline_dict.get(timeline_name, "")
 
-    def get_subfolder_by_name(
-        self, subfolder_name: str
-    ) -> Folder | str:
+    def get_subfolder_by_name(self, subfolder_name: str) -> Folder | str:
         """
         Get subfolder (Folder object) under the root folder in the media pool.
         """
@@ -136,4 +133,12 @@ class Resolve:
         if subfolder:
             return subfolder
         else:
-            return self.root_folder
+            current_selected_folder = self.media_pool.GetCurrentFolder()
+            if recursion_begins_at_root:
+                raise Exception(
+                    f"Can't find the subfolder with the given name in root folder."
+                )
+            else:
+                raise Exception(
+                    f"Can't find the subfolder with the given name in '{current_selected_folder.GetName()}'."
+                )

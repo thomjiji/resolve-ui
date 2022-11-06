@@ -10,5 +10,5 @@ class Folder:
 
 
 class Timeline:
-    def GetName(self):
+    def GetName(self) -> str:
         ...
