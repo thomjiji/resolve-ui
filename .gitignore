@@ -13,3 +13,4 @@ src/_gsdata_/
 ref/
 tmp.ipynb
 .ipynb_checkpoints/
+**/proxy_runner.log
