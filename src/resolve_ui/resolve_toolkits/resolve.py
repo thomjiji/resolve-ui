@@ -1,7 +1,5 @@
-from typing import Union
 from .resolve_init import GetResolve
-from pybmd import timeline as bmd_timeline
-from pybmd import folder as bmd_folder
+from .type import Folder, Timeline
 
 
 class Resolve:
@@ -35,7 +33,7 @@ class Resolve:
         self.root_folder = self.media_pool.GetRootFolder()
         self.current_timeline = self.project.GetCurrentTimeline()
 
-    def get_all_timeline(self) -> list[bmd_timeline.Timeline]:
+    def get_all_timeline(self) -> list[Timeline]:
         """Get all existing timelines. Return a list containing all the timeline
         object.
         """
@@ -44,24 +42,20 @@ class Resolve:
             all_timeline.append(self.project.GetTimelineByIndex(timeline_index))
         return all_timeline
 
-    def get_timeline_by_name(
-        self, timeline_name: str
-    ) -> Union[str, bmd_timeline.Timeline]:
+    def get_timeline_by_name(self, timeline_name: str) -> str | Timeline:
         """Get timeline object by name."""
-        all_timeline: list[bmd_timeline.Timeline] = self.get_all_timeline()
+        all_timeline: list[Timeline] = self.get_all_timeline()
         timeline_dict = {
             timeline.GetName(): timeline for timeline in all_timeline  # type: ignore
         }
         return timeline_dict.get(timeline_name, "")
 
-    def get_subfolder_by_name(
-        self, subfolder_name: str
-    ) -> Union[str, bmd_folder.Folder]:
+    def get_subfolder_by_name(self, subfolder_name: str) -> str | Folder:
         """Get subfolder (Folder object) under the root folder in the media
         pool.
         """
         all_subfolder = self.root_folder.GetSubFolderList()
-        subfolder_dict: dict[str, bmd_folder.Folder] = {
+        subfolder_dict: dict[str, Folder] = {
             subfolder.GetName(): subfolder for subfolder in all_subfolder
         }
         return subfolder_dict.get(subfolder_name, "")

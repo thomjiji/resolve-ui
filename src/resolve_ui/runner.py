@@ -1,21 +1,19 @@
 import os
 from pprint import pprint
-from typing import List, Dict, Union
 from resolve_toolkits import main
-from pybmd import Bmd
 from pybmd import toolkits
-from pybmd import timeline as bmd_timeline
-from pybmd import folder as bmd_folder
+from resolve_toolkits.resolve_init import GetResolve
+from resolve_toolkits.type import Folder, Timeline
 
 # Constants
 INVALID_EXTENSION = ["DS_Store", "JPG", "JPEG", "SRT"]
 
-# Initialize Resolve base object using pybmd
-resolve = Bmd()
-project = resolve.get_project_manager().get_current_project()
-media_pool = project.get_media_pool()
-root_folder = media_pool.get_root_folder()
-media_storage = resolve.get_media_stroage()
+# Initialize Resolve base object.
+resolve = GetResolve()
+project = resolve.GetProjectManager().GetCurrentProject()
+media_pool = project.GetMediaPool()
+root_folder = media_pool.GetRootFolder()
+media_storage = resolve.GetMediaStorage()
 
 # Initialize the UI
 fusion = bmd.scriptapp("Fusion")  # type: ignore
@@ -280,7 +278,7 @@ tree_header = {
 }
 
 # General functions
-def absolute_file_paths(path: str) -> List[str]:
+def absolute_file_paths(path: str) -> list[str]:
     """Get the abs of all files from the input path, exclude files from
     INVALID_EXTENSION.
     """
@@ -297,7 +295,7 @@ def absolute_file_paths(path: str) -> List[str]:
     return absolute_file_path_list
 
 
-def get_sorted_path(path: str) -> List[str]:
+def get_sorted_path(path: str) -> list[str]:
     """Get the abs of all files from the input path, then sort the abs,
     and finally return a list of sorted abs.
     """
@@ -311,7 +309,7 @@ def get_sorted_path(path: str) -> List[str]:
     return fullpaths
 
 
-def get_all_timeline() -> List[bmd_timeline.Timeline]:
+def get_all_timeline() -> list[Timeline]:
     """Get all existing timelines. Return a list containing timeline object.
 
     Returns:
@@ -324,12 +322,12 @@ def get_all_timeline() -> List[bmd_timeline.Timeline]:
     return all_timeline
 
 
-def get_subfolder_by_name(subfolder_name: str) -> Union[str, bmd_folder.Folder]:
+def get_subfolder_by_name(subfolder_name: str) -> str | Folder:
     """Get subfolder (Folder object) under the root folder in the media
     pool.
     """
     all_subfolder = root_folder.get_sub_folder_list()
-    subfolder_dict: Dict[str, bmd_folder.Folder] = {
+    subfolder_dict: dict[str, Folder] = {
         subfolder.get_name(): subfolder for subfolder in all_subfolder
     }
     return subfolder_dict.get(subfolder_name, "")

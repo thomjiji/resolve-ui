@@ -1,21 +1,18 @@
 import os
-from pprint import pprint
 import re
-from typing import Union
 from resolve_toolkits import main
-from pybmd import Bmd
-from pybmd import timeline as bmd_timeline
-from pybmd import folder as bmd_folder
+from resolve_toolkits.type import Folder, Timeline
+from resolve_toolkits.resolve_init import GetResolve
 
 # Constants
 INVALID_EXTENSION = ["DS_Store", "JPG", "JPEG", "SRT"]
 
-# Initialize Resolve base object using pybmd
-resolve = Bmd()
-project = resolve.get_project_manager().get_current_project()
-media_pool = project.get_media_pool()
-root_folder = media_pool.get_root_folder()
-media_storage = resolve.get_media_stroage()
+# Initialize Resolve base object.
+resolve = GetResolve()
+project = resolve.GetProjectManager().GetCurrentProject()
+media_pool = project.GetMediaPool()
+root_folder = media_pool.GetRootFolder()
+media_storage = resolve.GetMediaStorage()
 
 # Initialize the UI
 fusion = bmd.scriptapp("Fusion")  # type: ignore
@@ -241,7 +238,7 @@ def get_sorted_path(path: str) -> list[str]:
     return fullpaths
 
 
-def get_all_timeline() -> list[bmd_timeline.Timeline]:
+def get_all_timeline() -> list[Timeline]:
     """
     Get all existing timelines. Return a list containing timeline object.
 
@@ -252,19 +249,19 @@ def get_all_timeline() -> list[bmd_timeline.Timeline]:
 
     """
     all_timeline = []
-    for timeline_index in range(1, project.get_timeline_count() + 1, 1):
-        all_timeline.append(project.get_timeline_by_index(timeline_index))
+    for timeline_index in range(1, project.GetTimelineCount() + 1, 1):
+        all_timeline.append(project.GetTimelineByIndex(timeline_index))
     return all_timeline
 
 
-def get_subfolder_by_name(subfolder_name: str) -> Union[str, bmd_folder.Folder]:
+def get_subfolder_by_name(subfolder_name: str) -> str | Folder:
     """
     Get subfolder (Folder object) under the root folder in the media
     pool.
     """
-    all_subfolder = root_folder.get_sub_folder_list()
-    subfolder_dict: dict[str, bmd_folder.Folder] = {
-        subfolder.get_name(): subfolder for subfolder in all_subfolder
+    all_subfolder = root_folder.GetSubFolderList()
+    subfolder_dict: dict[str, Folder] = {
+        subfolder.GetName(): subfolder for subfolder in all_subfolder
     }
     return subfolder_dict.get(subfolder_name, "")
 
@@ -337,11 +334,11 @@ def on_clear_and_restart(ev):
     pool and switch back to Edit page.
     """
     all_timeline = get_all_timeline()
-    media_pool.delete_timelines(all_timeline)
-    subfolders_to_be_deleted = root_folder.get_sub_folder_list()
-    media_pool.delete_folders(subfolders_to_be_deleted)
-    media_pool.delete_clips(root_folder.get_clip_list())
-    resolve.open_page("edit")
+    media_pool.DeleteTimelines(all_timeline)
+    subfolders_to_be_deleted = root_folder.GetSubFolderList()
+    media_pool.DeleteFolders(subfolders_to_be_deleted)
+    media_pool.DeleteClips(root_folder.GetClipList())
+    resolve.OpenPage("edit")
 
 
 def on_run(ev):
