@@ -38,15 +38,15 @@ clearAllMessageID = "Clear all message"
 win = dispatcher.AddWindow(
     {
         "ID": "myWindow",
-        # The position and size of the window on the screen, this
-        # value allows it to appear right in the middle of the screen.
+        # The position and size of the window on the screen, this value allows 
+        # it to appear right in the middle of the screen.
         "Geometry": [
             500,
             300,
             800,
             600,
         ],
-        "WindowTitle": "Automator",
+        "WindowTitle": "Proxy Runner",
     },
     ui.VGroup(
         {
@@ -225,8 +225,8 @@ def absolute_file_paths(path: str) -> list[str]:
 
 def get_sorted_path(path: str) -> list[str]:
     """
-    Get the abs of all files from the input path, then sort the abs,
-    and finally return a list of sorted abs.
+    Get the abs of all files from the input path, then sort the abs, and finally
+    return a list of sorted abs.
     """
     filename_and_fullpath_dict = {
         os.path.basename(os.path.splitext(path)[0]): path
@@ -256,8 +256,7 @@ def get_all_timeline() -> list[Timeline]:
 
 def get_subfolder_by_name(subfolder_name: str) -> str | Folder:
     """
-    Get subfolder (Folder object) under the root folder in the media
-    pool.
+    Get subfolder (Folder object) under the root folder in the media pool.
     """
     all_subfolder = root_folder.GetSubFolderList()
     subfolder_dict: dict[str, Folder] = {
@@ -285,7 +284,9 @@ def read_logs() -> list[str]:
     Read line by line from a fixed path log file and store each line in a list,
     each line is an element of the list.
     """
-    with open("/Users/thom/code/resolve-ui/src/resolve_ui/log/proxy_runner.log", "r") as f:
+    with open(
+        "/Users/thom/code/resolve-ui/src/resolve_ui/log/proxy_runner.log", "r"
+    ) as f:
         log_lines = [line.strip() for line in f.readlines()]
         return log_lines
 
@@ -330,8 +331,8 @@ def on_click_tree_item(ev):
 
 def on_clear_and_restart(ev):
     """
-    For the convenience of development, clear all the content in the media
-    pool and switch back to Edit page.
+    For the convenience of development, clear all the content in the media pool 
+    and switch back to Edit page.
     """
     all_timeline = get_all_timeline()
     media_pool.DeleteTimelines(all_timeline)
