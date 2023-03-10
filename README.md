@@ -2,14 +2,18 @@
 
 把 `resolve-ui` scripts 放到以下的路径去就能够在 DaVinci Resolve 里唤出。
 
-## Windows
+- Windows:
 
-`%PROGRAMDATA%\Blackmagic Design\DaVinci Resolve\Support\Workflow Integration Plugins`
+```shell
+%PROGRAMDATA%\Blackmagic Design\DaVinci Resolve\Support\Workflow Integration Plugins
+```
 
-## macOS
+- macOS:
 
-`/Library/Application Support/Blackmagic Design/DaVinci Resolve/Workflow Integration Plugins`
+```shell
+/Library/Application Support/Blackmagic Design/DaVinci Resolve/Workflow Integration Plugins
+```
 
-# Resolve API and Workflow Integrations README
+# Resolve API and Workflow Integrations README Path
 
 `/Library/Application Support/Blackmagic Design/DaVinci Resolve/Developer`
