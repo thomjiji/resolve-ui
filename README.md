@@ -16,4 +16,6 @@
 
 # Resolve API and Workflow Integrations README Path
 
-`/Library/Application Support/Blackmagic Design/DaVinci Resolve/Developer`
+```shell
+/Library/Application Support/Blackmagic Design/DaVinci Resolve/Developer
+```
