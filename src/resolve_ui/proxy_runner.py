@@ -2,22 +2,21 @@ import os
 import re
 from resolve_toolkits import main
 from resolve_toolkits.type import Folder, Timeline
-from resolve_toolkits.resolve_init import GetResolve
 
 # Constants
 INVALID_EXTENSION = ["DS_Store", "JPG", "JPEG", "SRT"]
 
 # Initialize Resolve base object.
-resolve = GetResolve()
+resolve = bmd.scriptapp("Resolve")
 project = resolve.GetProjectManager().GetCurrentProject()
 media_pool = project.GetMediaPool()
 root_folder = media_pool.GetRootFolder()
 media_storage = resolve.GetMediaStorage()
 
 # Initialize the UI
-fusion = bmd.scriptapp("Fusion")  # type: ignore
+fusion = bmd.scriptapp("Fusion")
 ui = fusion.UIManager
-dispatcher = bmd.UIDispatcher(ui)  # type: ignore
+dispatcher = bmd.UIDispatcher(ui)
 
 # Declare UI elements ID
 inputPathID = "Input path"
@@ -331,8 +330,7 @@ def on_click_tree_item(ev):
 
 def on_clear_and_restart(ev):
     """
-    For the convenience of development, clear all the content in the media pool 
-    and switch back to Edit page.
+    Clear all the content in the media pool and switch back to Edit page.
     """
     all_timeline = get_all_timeline()
     media_pool.DeleteTimelines(all_timeline)
