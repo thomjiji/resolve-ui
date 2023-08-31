@@ -1,5 +1,6 @@
 from .resolve_init import GetResolve
 from .type import Folder, Timeline
+import DaVinciResolveScript as dvr_script
 
 
 class Resolve:
@@ -8,24 +9,11 @@ class Resolve:
 
     This class is used to initialize some necessary objects for the baisc use of
     the API.
-
-    Arrtibutes
-    ----------
-    resolve
-        resolve object, the beginning of all the other object of DaVinci
-        Resolve.
-    project_manager
-    project
-    media_storage
-    media_pool
-    root_folder
-    current_timeline
-
     """
 
     def __init__(self):
         """Initialize some necessary objects."""
-        self.resolve = GetResolve()
+        self.resolve = dvr_script.scriptapp("Resolve")
         self.project_manager = self.resolve.GetProjectManager()
         self.project = self.project_manager.GetCurrentProject()
         self.media_storage = self.resolve.GetMediaStorage()

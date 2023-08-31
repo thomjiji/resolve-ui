@@ -43,8 +43,8 @@ win = dispatcher.AddWindow(
         "Geometry": [
             500,
             300,
-            800,
-            600,
+            800,  # window width
+            600,  # window height
         ],
         "WindowTitle": "Proxy Runner",
     },
